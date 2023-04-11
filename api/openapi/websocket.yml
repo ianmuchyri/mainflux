@@ -4,7 +4,7 @@ info:
   description: WebSocket API for sending messages through communication channels.
   version: "1.0.0"
 paths:
-  /channels/{id}/messages:
+  /channels/{chanId}/messages:
     post:
       summary: Sends message to the communication channel
       description: |

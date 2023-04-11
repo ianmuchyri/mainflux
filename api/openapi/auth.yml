@@ -25,7 +25,7 @@ paths:
           description: Missing or invalid content type.
         '500':
           $ref: "#/components/responses/ServiceError"
-  /keys/{id}:
+  /keys/{keyId}:
     get:
       summary: Gets API key details.
       description: |
@@ -541,7 +541,7 @@ components:
 
   parameters:
     ApiKeyId:
-      name: id
+      name: keyId
       description: API Key ID.
       in: path
       schema:
