@@ -46,25 +46,25 @@ func MakeHandler(svc bootstrap.Service, reader bootstrap.ConfigReader, logger lo
 		encodeResponse,
 		opts...))
 
-	r.Get("/things/configs/:id", kithttp.NewServer(
+	r.Get("/things/configs/:configId", kithttp.NewServer(
 		viewEndpoint(svc),
 		decodeEntityRequest,
 		encodeResponse,
 		opts...))
 
-	r.Put("/things/configs/:id", kithttp.NewServer(
+	r.Put("/things/configs/:configId", kithttp.NewServer(
 		updateEndpoint(svc),
 		decodeUpdateRequest,
 		encodeResponse,
 		opts...))
 
-	r.Patch("/things/configs/certs/:id", kithttp.NewServer(
+	r.Patch("/things/configs/certs/:certId", kithttp.NewServer(
 		updateCertEndpoint(svc),
 		decodeUpdateCertRequest,
 		encodeResponse,
 		opts...))
 
-	r.Put("/things/configs/connections/:id", kithttp.NewServer(
+	r.Put("/things/configs/connections/:connId", kithttp.NewServer(
 		updateConnEndpoint(svc),
 		decodeUpdateConnRequest,
 		encodeResponse,
@@ -88,13 +88,13 @@ func MakeHandler(svc bootstrap.Service, reader bootstrap.ConfigReader, logger lo
 		encodeSecureRes,
 		opts...))
 
-	r.Put("/things/state/:id", kithttp.NewServer(
+	r.Put("/things/state/:stateId", kithttp.NewServer(
 		stateEndpoint(svc),
 		decodeStateRequest,
 		encodeResponse,
 		opts...))
 
-	r.Delete("/things/configs/:id", kithttp.NewServer(
+	r.Delete("/things/configs/:configId", kithttp.NewServer(
 		removeEndpoint(svc),
 		decodeEntityRequest,
 		encodeResponse,
@@ -126,7 +126,7 @@ func decodeUpdateRequest(_ context.Context, r *http.Request) (interface{}, error
 
 	req := updateReq{
 		token: apiutil.ExtractBearerToken(r),
-		id:    bone.GetValue(r, "id"),
+		id:    bone.GetValue(r, "configId"),
 	}
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		return nil, errors.Wrap(errors.ErrMalformedEntity, err)
@@ -142,7 +142,7 @@ func decodeUpdateCertRequest(_ context.Context, r *http.Request) (interface{}, e
 
 	req := updateCertReq{
 		token:   apiutil.ExtractBearerToken(r),
-		thingID: bone.GetValue(r, "id"),
+		thingID: bone.GetValue(r, "certId"),
 	}
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		return nil, errors.Wrap(errors.ErrMalformedEntity, err)
@@ -158,7 +158,7 @@ func decodeUpdateConnRequest(_ context.Context, r *http.Request) (interface{}, e
 
 	req := updateConnReq{
 		token: apiutil.ExtractBearerToken(r),
-		id:    bone.GetValue(r, "id"),
+		id:    bone.GetValue(r, "connId"),
 	}
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		return nil, errors.Wrap(errors.ErrMalformedEntity, err)
@@ -209,7 +209,7 @@ func decodeStateRequest(_ context.Context, r *http.Request) (interface{}, error)
 
 	req := changeStateReq{
 		token: apiutil.ExtractBearerToken(r),
-		id:    bone.GetValue(r, "id"),
+		id:    bone.GetValue(r, "stateId"),
 	}
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		return nil, errors.Wrap(errors.ErrMalformedEntity, err)
@@ -221,7 +221,7 @@ func decodeStateRequest(_ context.Context, r *http.Request) (interface{}, error)
 func decodeEntityRequest(_ context.Context, r *http.Request) (interface{}, error) {
 	req := entityReq{
 		token: apiutil.ExtractBearerToken(r),
-		id:    bone.GetValue(r, "id"),
+		id:    bone.GetValue(r, "configId"),
 	}
 
 	return req, nil
