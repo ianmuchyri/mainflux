@@ -88,7 +88,7 @@ func MakeHandler(svc bootstrap.Service, reader bootstrap.ConfigReader, logger lo
 		encodeSecureRes,
 		opts...))
 
-	r.Put("/things/state/:stateId", kithttp.NewServer(
+	r.Put("/things/state/:thingId", kithttp.NewServer(
 		stateEndpoint(svc),
 		decodeStateRequest,
 		encodeResponse,
@@ -209,7 +209,7 @@ func decodeStateRequest(_ context.Context, r *http.Request) (interface{}, error)
 
 	req := changeStateReq{
 		token: apiutil.ExtractBearerToken(r),
-		id:    bone.GetValue(r, "stateId"),
+		id:    bone.GetValue(r, "thingId"),
 	}
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		return nil, errors.Wrap(errors.ErrMalformedEntity, err)

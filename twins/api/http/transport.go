@@ -74,7 +74,7 @@ func MakeHandler(tracer opentracing.Tracer, svc twins.Service, logger logger.Log
 		opts...,
 	))
 
-	r.Get("/states/:stateId", kithttp.NewServer(
+	r.Get("/states/:twinId", kithttp.NewServer(
 		kitot.TraceServer(tracer, "list_states")(listStatesEndpoint(svc)),
 		decodeListStates,
 		encodeResponse,
@@ -172,7 +172,7 @@ func decodeListStates(_ context.Context, r *http.Request) (interface{}, error) {
 		token:  apiutil.ExtractBearerToken(r),
 		limit:  l,
 		offset: o,
-		id:     bone.GetValue(r, "stateId"),
+		id:     bone.GetValue(r, "twinId"),
 	}
 
 	return req, nil
