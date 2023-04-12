@@ -65,8 +65,8 @@ paths:
         Creates new group that can be used for grouping entities - things, users.
       tags:
         - auth
-      parameters:
-        - $ref: "#/components/requestBodies/GroupCreateReq"
+      requestBody:
+        $ref: "#/components/requestBodies/GroupCreateReq"
       responses:
         '201':
           $ref: "#/components/responses/GroupCreateRes"
