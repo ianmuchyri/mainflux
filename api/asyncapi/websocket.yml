@@ -68,11 +68,21 @@ components:
       schema:
         type: string
         format: uuid
+      required: true
     subtopic:
       description: Arbitrary message subtopic.
       schema:
         type: string
         default: ''
+      required: false
 
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: uuid
+      description: |
+        * Thing access: "Authorization: Thing <thing_key>"
 
-  
+security:
+  - bearerAuth: []
