@@ -186,7 +186,7 @@ components:
               schema:
                 type: string
                 description: Created subscription relative URL
-                example: /subscriptions/{id}
+                example: /subscriptions/{subId}
     View:
       description: View subscription.
       content:
