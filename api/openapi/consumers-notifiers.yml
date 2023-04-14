@@ -42,7 +42,7 @@ paths:
           description: Missing or invalid access token provided.
         "500":
           $ref: "#/components/responses/ServiceError"
-  /subscriptions/{subId}:
+  /subscriptions/{subID}:
     get:
       summary: Get subscription with the provided id
       description: Retrieves a subscription with the provided id.
@@ -126,7 +126,7 @@ components:
 
   parameters:
     Id:
-      name: subId
+      name: subID
       description: Unique identifier.
       in: path
       schema:

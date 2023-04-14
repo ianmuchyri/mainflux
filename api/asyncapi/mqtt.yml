@@ -29,10 +29,10 @@ servers:
         description: Thing Key corresponding to the Thing ID.
 
 channels:
-  channels/{channelId}/messages/{subtopic}:
+  channels/{channelID}/messages/{subtopic}:
     parameters:
-      channelId:
-        $ref: '#/components/parameters/channelId'
+      channelID:
+        $ref: '#/components/parameters/channelID'
       subtopic:
         $ref: '#/components/parameters/subtopic'
     publish:
@@ -74,7 +74,7 @@ components:
         ```
 
   parameters:
-    channelId:
+    channelID:
       description: Channel ID connected to the Thing ID defined in the username.
       schema:
         type: string

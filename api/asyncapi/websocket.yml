@@ -29,10 +29,10 @@ servers:
         default: '8186'
 
 channels:
-  'channels/{channelId}/messages/{subtopic}':
+  'channels/{channelID}/messages/{subtopic}':
     parameters:
-      channelId:
-        $ref: '#/components/parameters/channelId'
+      channelID:
+        $ref: '#/components/parameters/channelID'
         in: path
         required: true
       subtopic:
@@ -81,7 +81,7 @@ channels:
       http:
         type: request
         method: GET
-        
+
 components:
   messages:
     jsonMsg:
@@ -122,7 +122,7 @@ components:
 
         ```
   parameters:
-    channelId:
+    channelID:
       description: Channel ID connected to the Thing ID defined in the username.
       schema:
         type: string
