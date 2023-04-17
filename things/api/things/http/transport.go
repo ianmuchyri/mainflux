@@ -437,6 +437,7 @@ func decodeChannelListByConnection(_ context.Context, r *http.Request) (interfac
 
 	return req, nil
 }
+
 func decodeThingListByConnection(_ context.Context, r *http.Request) (interface{}, error) {
 	o, err := apiutil.ReadUintQuery(r, offsetKey, defOffset)
 	if err != nil {
