@@ -19,9 +19,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-const (
-	instanceID = "5de9b29a-feb9-11ed-be56-0242ac120002"
-)
+const instanceID = "5de9b29a-feb9-11ed-be56-0242ac120002"
 
 func newService(cc policies.ThingsServiceClient) adapter.Service {
 	pub := mocks.NewPublisher()

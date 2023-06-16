@@ -29,9 +29,7 @@ import (
 	upolicies "github.com/mainflux/mainflux/users/policies"
 )
 
-const (
-	instanceID = "5de9b29a-feb9-11ed-be56-0242ac120002"
-)
+const instanceID = "5de9b29a-feb9-11ed-be56-0242ac120002"
 
 var (
 	thingsNum         = 1
