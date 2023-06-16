@@ -39,10 +39,11 @@ const (
 )
 
 type config struct {
-	LogLevel      string `env:"MF_WS_ADAPTER_LOG_LEVEL"   envDefault:"info"`
-	BrokerURL     string `env:"MF_BROKER_URL"             envDefault:"nats://localhost:4222"`
-	JaegerURL     string `env:"MF_JAEGER_URL"             envDefault:"http://jaeger:14268/api/traces"`
-	SendTelemetry bool   `env:"MF_SEND_TELEMETRY"         envDefault:"true"`
+	LogLevel      string `env:"MF_WS_ADAPTER_LOG_LEVEL"    envDefault:"info"`
+	BrokerURL     string `env:"MF_BROKER_URL"              envDefault:"nats://localhost:4222"`
+	JaegerURL     string `env:"MF_JAEGER_URL"              envDefault:"http://jaeger:14268/api/traces"`
+	SendTelemetry bool   `env:"MF_SEND_TELEMETRY"          envDefault:"true"`
+	InstanceID    string `env:"MF_WS_ADAPTER_INSTANCE_ID"  envDefault:""`
 }
 
 func main() {
@@ -66,7 +67,7 @@ func main() {
 	defer internal.Close(logger, tcHandler)
 	logger.Info("Successfully connected to things grpc server " + tcHandler.Secure())
 
-	tp, err := jaegerClient.NewProvider(svcName, cfg.JaegerURL)
+	tp, err := jaegerClient.NewProvider(svcName, cfg.JaegerURL, instanceID)
 	if err != nil {
 		logger.Fatal(fmt.Sprintf("failed to init Jaeger: %s", err))
 	}

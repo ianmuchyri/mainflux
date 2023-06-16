@@ -48,7 +48,7 @@ var (
 )
 
 // MakeHandler returns a HTTP handler for API endpoints.
-func MakeHandler(svc readers.MessageRepository, tc tpolicies.ThingsServiceClient, ac upolicies.AuthServiceClient, svcName string) http.Handler {
+func MakeHandler(svc readers.MessageRepository, tc tpolicies.ThingsServiceClient, ac upolicies.AuthServiceClient, svcName, instanceID string) http.Handler {
 
 	opts := []kithttp.ServerOption{
 		kithttp.ServerErrorEncoder(encodeError),

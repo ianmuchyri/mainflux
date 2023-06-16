@@ -57,6 +57,7 @@ type config struct {
 	JaegerURL             string        `env:"MF_JAEGER_URL"                                envDefault:"http://jaeger:14268/api/traces"`
 	BrokerURL             string        `env:"MF_BROKER_URL"                                envDefault:"nats://localhost:4222"`
 	SendTelemetry         bool          `env:"MF_SEND_TELEMETRY"                            envDefault:"true"`
+	InstanceID            string        `env:"MF_MQTT_ADAPTER_INSTANCE_ID"                  envDefault:""`
 }
 
 func main() {
@@ -84,7 +85,7 @@ func main() {
 		}
 	}
 
-	tp, err := jaegerClient.NewProvider(svcName, cfg.JaegerURL)
+	tp, err := jaegerClient.NewProvider(svcName, cfg.JaegerURL, instanceID)
 	if err != nil {
 		logger.Error(fmt.Sprintf("Failed to init Jaeger: %s", err))
 	}

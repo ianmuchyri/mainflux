@@ -367,6 +367,6 @@ func TestViewCert(t *testing.T) {
 func newThingsServer(svc clients.Service) *httptest.Server {
 	logger := logger.NewMock()
 	mux := bone.New()
-	httpapi.MakeHandler(svc, mux, logger)
+	httpapi.MakeHandler(svc, mux, logger, instanceID)
 	return httptest.NewServer(mux)
 }

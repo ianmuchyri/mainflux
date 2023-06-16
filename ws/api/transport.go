@@ -35,7 +35,7 @@ var (
 )
 
 // MakeHandler returns http handler with handshake endpoint.
-func MakeHandler(svc ws.Service, l mflog.Logger) http.Handler {
+func MakeHandler(svc ws.Service, l mflog.Logger, instanceID string) http.Handler {
 	logger = l
 
 	mux := bone.New()

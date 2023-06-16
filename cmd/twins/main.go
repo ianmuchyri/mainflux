@@ -56,6 +56,7 @@ type config struct {
 	BrokerURL       string `env:"MF_BROKER_URL"               envDefault:"nats://localhost:4222"`
 	JaegerURL       string `env:"MF_JAEGER_URL"               envDefault:"http://jaeger:14268/api/traces"`
 	SendTelemetry   bool   `env:"MF_SEND_TELEMETRY"           envDefault:"true"`
+	InstanceID      string `env:"MF_TWINS_INSTANCE_ID"        envDefault:""`
 }
 
 func main() {
@@ -83,7 +84,7 @@ func main() {
 		logger.Fatal(fmt.Sprintf("failed to setup postgres database : %s", err))
 	}
 
-	tp, err := jaegerClient.NewProvider(svcName, cfg.JaegerURL)
+	tp, err := jaegerClient.NewProvider(svcName, cfg.JaegerURL, instanceID)
 	if err != nil {
 		logger.Fatal(fmt.Sprintf("failed to init Jaeger: %s", err))
 	}
@@ -99,7 +100,7 @@ func main() {
 	case true:
 		auth = localusers.NewAuthService(cfg.StandaloneID, cfg.StandaloneToken)
 	default:
-		authServiceClient, authHandler, err := authClient.Setup(envPrefix, svcName)
+		authServiceClient, authHandler, err := authClient.Setup(envPrefix, svcName, instanceID)
 		if err != nil {
 			logger.Fatal(err.Error())
 		}
@@ -121,7 +122,7 @@ func main() {
 	if err := env.Parse(&httpServerConfig, env.Options{Prefix: envPrefixHttp, AltPrefix: envPrefix}); err != nil {
 		logger.Fatal(fmt.Sprintf("failed to load %s HTTP server configuration : %s", svcName, err))
 	}
-	hs := httpserver.New(ctx, cancel, svcName, httpServerConfig, twapi.MakeHandler(svc, logger), logger)
+	hs := httpserver.New(ctx, cancel, svcName, httpServerConfig, twapi.MakeHandler(svc, logger, instanceID), logger)
 
 	if cfg.SendTelemetry {
 		chc := chclient.New(svcName, mainflux.Version, logger, cancel)

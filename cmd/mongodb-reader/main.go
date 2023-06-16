@@ -38,6 +38,7 @@ const (
 type config struct {
 	LogLevel      string `env:"MF_MONGO_READER_LOG_LEVEL"   envDefault:"info"`
 	SendTelemetry bool   `env:"MF_SEND_TELEMETRY"           envDefault:"true"`
+	InstanceID    string `env:"MF_MONGO_READER_INSTANCE_ID"   envDefault:""`
 }
 
 func main() {
@@ -79,7 +80,7 @@ func main() {
 	if err := env.Parse(&httpServerConfig, env.Options{Prefix: envPrefixHttp, AltPrefix: envPrefix}); err != nil {
 		logger.Fatal(fmt.Sprintf("failed to load %s HTTP server configuration : %s", svcName, err))
 	}
-	hs := httpserver.New(ctx, cancel, svcName, httpServerConfig, api.MakeHandler(repo, tc, auth, svcName), logger)
+	hs := httpserver.New(ctx, cancel, svcName, httpServerConfig, api.MakeHandler(repo, tc, auth, svcName, instanceID), logger)
 
 	if cfg.SendTelemetry {
 		chc := chclient.New(svcName, mainflux.Version, logger, cancel)

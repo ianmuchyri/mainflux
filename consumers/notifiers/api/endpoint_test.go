@@ -74,7 +74,7 @@ func newService(tokens map[string]string) notifiers.Service {
 
 func newServer(svc notifiers.Service) *httptest.Server {
 	logger := logger.NewMock()
-	mux := httpapi.MakeHandler(svc, logger)
+	mux := httpapi.MakeHandler(svc, logger, instanceID)
 	return httptest.NewServer(mux)
 }
 

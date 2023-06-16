@@ -50,6 +50,7 @@ const (
 	defBSContent       = ""
 	defCertsHoursValid = "2400h"
 	defSendTelemetry   = "true"
+	defInstanceID      = ""
 
 	envConfigFile       = "MF_PROVISION_CONFIG_FILE"
 	envLogLevel         = "MF_PROVISION_LOG_LEVEL"
@@ -71,6 +72,7 @@ const (
 	envBSContent        = "MF_PROVISION_BS_CONTENT"
 	envCertsHoursValid  = "MF_PROVISION_CERTS_HOURS_VALID"
 	envSendTelemetry    = "MF_SEND_TELEMETRY"
+	envInstanceID       = "MF_PROVISION_INSTANCE_ID"
 
 	contentType = "application/json"
 )

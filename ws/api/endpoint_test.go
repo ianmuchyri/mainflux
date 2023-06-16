@@ -38,7 +38,7 @@ func newService(cc policies.ThingsServiceClient) (ws.Service, mocks.MockPubSub) 
 
 func newHTTPServer(svc ws.Service) *httptest.Server {
 	logger := mflog.NewMock()
-	mux := api.MakeHandler(svc, logger)
+	mux := api.MakeHandler(svc, logger, instanceID)
 	return httptest.NewServer(mux)
 }
 

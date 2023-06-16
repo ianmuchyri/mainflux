@@ -23,6 +23,7 @@ import (
 	mflog "github.com/mainflux/mainflux/logger"
 	"github.com/mainflux/mainflux/pkg/messaging/brokers"
 	"github.com/mainflux/mainflux/pkg/messaging/tracing"
+	"github.com/mainflux/mainflux/pkg/uuid"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -40,6 +41,7 @@ type config struct {
 	BrokerURL     string `env:"MF_BROKER_URL"                  envDefault:"nats://localhost:4222"`
 	JaegerURL     string `env:"MF_JAEGER_URL"                  envDefault:"localhost:6831"`
 	SendTelemetry bool   `env:"MF_SEND_TELEMETRY"              envDefault:"true"`
+	InstanceID    string `env:"MF_INFLUX_WRITER_INSTANCE_ID"   envDefault:""`
 }
 
 func main() {
@@ -56,7 +58,15 @@ func main() {
 		log.Fatalf("failed to init logger: %s", err)
 	}
 
-	tp, err := jaegerClient.NewProvider(svcName, cfg.JaegerURL)
+	instanceID := cfg.InstanceID
+	if instanceID == "" {
+		instanceID, err = uuid.New().ID()
+		if err != nil {
+			log.Fatalf("Failed to generate instanceID: %s", err)
+		}
+	}
+
+	tp, err := jaegerClient.NewProvider(svcName, cfg.JaegerURL, instanceID)
 	if err != nil {
 		logger.Error(fmt.Sprintf("Failed to init Jaeger: %s", err))
 	}

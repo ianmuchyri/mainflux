@@ -54,6 +54,7 @@ type config struct {
 	ThingsURL      string `env:"MF_THINGS_URL"                 envDefault:"http://localhost:9000"`
 	JaegerURL      string `env:"MF_JAEGER_URL"                 envDefault:"http://jaeger:14268/api/traces"`
 	SendTelemetry  bool   `env:"MF_SEND_TELEMETRY"             envDefault:"true"`
+	InstanceID     string `env:"MF_BOOTSTRAP_INSTANCE_ID"      envDefault:""`
 }
 
 func main() {
@@ -87,14 +88,14 @@ func main() {
 	defer esClient.Close()
 
 	// Create new auth grpc client api
-	auth, authHandler, err := authClient.Setup(envPrefix, svcName)
+	auth, authHandler, err := authClient.Setup(envPrefix, svcName, instanceID)
 	if err != nil {
 		logger.Fatal(err.Error())
 	}
 	defer authHandler.Close()
 	logger.Info("Successfully connected to auth grpc server " + authHandler.Secure())
 
-	tp, err := jaegerClient.NewProvider(svcName, cfg.JaegerURL)
+	tp, err := jaegerClient.NewProvider(svcName, cfg.JaegerURL, instanceID)
 	if err != nil {
 		logger.Fatal(fmt.Sprintf("failed to init Jaeger: %s", err))
 	}
