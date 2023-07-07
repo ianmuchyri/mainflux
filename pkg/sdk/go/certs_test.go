@@ -90,7 +90,7 @@ func newCertService() (certs.Service, error) {
 
 func newCertServer(svc certs.Service) *httptest.Server {
 	logger := logger.NewMock()
-	mux := httpapi.MakeHandler(svc, logger)
+	mux := httpapi.MakeHandler(svc, logger, instanceID)
 	return httptest.NewServer(mux)
 }
 

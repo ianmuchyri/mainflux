@@ -25,6 +25,7 @@ import (
 	mflog "github.com/mainflux/mainflux/logger"
 	"github.com/mainflux/mainflux/pkg/messaging/brokers"
 	pstracing "github.com/mainflux/mainflux/pkg/messaging/tracing"
+	"github.com/mainflux/mainflux/pkg/uuid"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -57,6 +58,14 @@ func main() {
 	logger, err := mflog.New(os.Stdout, cfg.LogLevel)
 	if err != nil {
 		log.Fatalf("failed to init logger: %s", err)
+	}
+
+	instanceID := cfg.InstanceID
+	if instanceID == "" {
+		instanceID, err = uuid.New().ID()
+		if err != nil {
+			log.Fatalf("Failed to generate instanceID: %s", err)
+		}
 	}
 
 	tc, tcHandler, err := thingsClient.Setup(envPrefix)

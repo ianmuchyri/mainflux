@@ -61,7 +61,7 @@ func MakeHandler(svc adapter.Service, instanceID string) http.Handler {
 		opts...,
 	))
 
-	r.GetFunc("/health", mainflux.Health("http"))
+	r.GetFunc("/health", mainflux.Health("http", instanceID))
 	r.Handle("/metrics", promhttp.Handler())
 
 	return r

@@ -80,7 +80,7 @@ func MakeHandler(svc twins.Service, logger logger.Logger, instanceID string) htt
 		opts...,
 	))
 
-	r.GetFunc("/health", mainflux.Health("twins"))
+	r.GetFunc("/health", mainflux.Health("twins", instanceID))
 	r.Handle("/metrics", promhttp.Handler())
 
 	return r

@@ -42,6 +42,7 @@ const (
 	email        = "test@example.com"
 	unknown      = "unknown"
 	channelsNum  = 3
+	instanceID   = "5de9b29a-feb9-11ed-be56-0242ac120002"
 )
 
 var (

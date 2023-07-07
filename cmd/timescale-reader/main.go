@@ -21,6 +21,7 @@ import (
 	"github.com/mainflux/mainflux/internal/server"
 	httpserver "github.com/mainflux/mainflux/internal/server/http"
 	mflog "github.com/mainflux/mainflux/logger"
+	"github.com/mainflux/mainflux/pkg/uuid"
 	"github.com/mainflux/mainflux/readers"
 	"github.com/mainflux/mainflux/readers/api"
 	"github.com/mainflux/mainflux/readers/timescale"
@@ -55,6 +56,14 @@ func main() {
 		log.Fatalf("failed to init logger: %s", err)
 	}
 
+	instanceID := cfg.InstanceID
+	if instanceID == "" {
+		instanceID, err = uuid.New().ID()
+		if err != nil {
+			log.Fatalf("Failed to generate instanceID: %s", err)
+		}
+	}
+
 	dbConfig := pgClient.Config{Name: defDB}
 	if err := dbConfig.LoadEnv(envPrefix); err != nil {
 		logger.Fatal(err.Error())
@@ -67,7 +76,7 @@ func main() {
 
 	repo := newService(db, logger)
 
-	auth, authHandler, err := authClient.Setup(envPrefix, svcName, instanceID)
+	auth, authHandler, err := authClient.Setup(envPrefix, svcName)
 	if err != nil {
 		logger.Fatal(err.Error())
 	}

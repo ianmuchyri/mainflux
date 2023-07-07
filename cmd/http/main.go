@@ -25,6 +25,7 @@ import (
 	"github.com/mainflux/mainflux/pkg/messaging"
 	"github.com/mainflux/mainflux/pkg/messaging/brokers"
 	pstracing "github.com/mainflux/mainflux/pkg/messaging/tracing"
+	"github.com/mainflux/mainflux/pkg/uuid"
 	"github.com/mainflux/mainflux/things/policies"
 	"go.opentelemetry.io/otel/trace"
 
@@ -58,6 +59,14 @@ func main() {
 	logger, err := mflog.New(os.Stdout, cfg.LogLevel)
 	if err != nil {
 		log.Fatalf("failed to init logger: %s", err)
+	}
+
+	instanceID := cfg.InstanceID
+	if instanceID == "" {
+		instanceID, err = uuid.New().ID()
+		if err != nil {
+			log.Fatalf("Failed to generate instanceID: %s", err)
+		}
 	}
 
 	tc, tcHandler, err := thingsClient.Setup(envPrefix)

@@ -29,6 +29,7 @@ import (
 	"github.com/mainflux/mainflux/pkg/messaging/brokers"
 	mqttpub "github.com/mainflux/mainflux/pkg/messaging/mqtt"
 	"github.com/mainflux/mainflux/pkg/messaging/tracing"
+	"github.com/mainflux/mainflux/pkg/uuid"
 	mp "github.com/mainflux/mproxy/pkg/mqtt"
 	"github.com/mainflux/mproxy/pkg/session"
 	ws "github.com/mainflux/mproxy/pkg/websocket"
@@ -72,6 +73,14 @@ func main() {
 	logger, err := mflog.New(os.Stdout, cfg.LogLevel)
 	if err != nil {
 		log.Fatalf("failed to init logger: %s", err)
+	}
+
+	instanceID := cfg.InstanceID
+	if instanceID == "" {
+		instanceID, err = uuid.New().ID()
+		if err != nil {
+			log.Fatalf("Failed to generate instanceID: %s", err)
+		}
 	}
 
 	if cfg.MqttTargetHealthCheck != "" {

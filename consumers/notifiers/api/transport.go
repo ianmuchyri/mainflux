@@ -66,7 +66,7 @@ func MakeHandler(svc notifiers.Service, logger logger.Logger, instanceID string)
 		opts...,
 	))
 
-	mux.GetFunc("/health", mainflux.Health("notifier"))
+	mux.GetFunc("/health", mainflux.Health("notifier", instanceID))
 	mux.Handle("/metrics", promhttp.Handler())
 
 	return mux

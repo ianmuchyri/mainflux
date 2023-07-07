@@ -51,6 +51,7 @@ const (
 	thingStateChange       = thingPrefix + "state_change"
 	thingBootstrap         = thingPrefix + "bootstrap"
 	thingUpdateConnections = thingPrefix + "update_connections"
+	instanceID             = "5de9b29a-feb9-11ed-be56-0242ac120002"
 )
 
 var (

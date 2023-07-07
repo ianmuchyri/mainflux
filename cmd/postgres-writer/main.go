@@ -43,7 +43,7 @@ type config struct {
 	BrokerURL     string `env:"MF_BROKER_URL"                    envDefault:"nats://localhost:4222"`
 	JaegerURL     string `env:"MF_JAEGER_URL"                    envDefault:"localhost:6831"`
 	SendTelemetry bool   `env:"MF_SEND_TELEMETRY"                envDefault:"true"`
-	InstanceID    string `env:"MF_POSTGRES_READER_INSTANCE_ID"   envDefault:""`
+	InstanceID    string `env:"MF_POSTGRES_WRITER_INSTANCE_ID"   envDefault:""`
 }
 
 func main() {
@@ -103,7 +103,7 @@ func main() {
 	if err := env.Parse(&httpServerConfig, env.Options{Prefix: envPrefixHttp, AltPrefix: envPrefix}); err != nil {
 		logger.Fatal(fmt.Sprintf("failed to load %s HTTP server configuration : %s", svcName, err))
 	}
-	hs := httpserver.New(ctx, cancel, svcName, httpServerConfig, api.MakeHandler(svcName), logger)
+	hs := httpserver.New(ctx, cancel, svcName, httpServerConfig, api.MakeHandler(svcName, instanceID), logger)
 
 	if cfg.SendTelemetry {
 		chc := chclient.New(svcName, mainflux.Version, logger, cancel)

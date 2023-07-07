@@ -31,6 +31,7 @@ const (
 	token       = "token"
 	wrongValue  = "wrong_value"
 	topic       = "topic"
+	instanceID  = "5de9b29a-feb9-11ed-be56-0242ac120002"
 )
 
 var (

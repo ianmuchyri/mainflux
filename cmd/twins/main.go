@@ -73,6 +73,14 @@ func main() {
 		log.Fatalf("failed to init logger: %s", err)
 	}
 
+	instanceID := cfg.InstanceID
+	if instanceID == "" {
+		instanceID, err = uuid.New().ID()
+		if err != nil {
+			log.Fatalf("Failed to generate instanceID: %s", err)
+		}
+	}
+
 	cacheClient, err := redisClient.Setup(envPrefixCache)
 	if err != nil {
 		logger.Fatal(err.Error())

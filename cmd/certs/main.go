@@ -75,6 +75,14 @@ func main() {
 		log.Fatalf("failed to init logger: %s", err)
 	}
 
+	instanceID := cfg.InstanceID
+	if instanceID == "" {
+		instanceID, err = uuid.New().ID()
+		if err != nil {
+			log.Fatalf("Failed to generate instanceID: %s", err)
+		}
+	}
+
 	if cfg.PkiHost == "" {
 		logger.Fatal("No host specified for PKI engine")
 	}
@@ -82,14 +90,6 @@ func main() {
 	pkiClient, err := vault.NewVaultClient(cfg.PkiToken, cfg.PkiHost, cfg.PkiPath, cfg.PkiRole)
 	if err != nil {
 		logger.Fatal("failed to configure client for PKI engine")
-	}
-
-	instanceID := cfg.InstanceID
-	if instanceID == "" {
-		instanceID, err = uuid.New().ID()
-		if err != nil {
-			log.Fatalf("Failed to generate instanceID: %s", err)
-		}
 	}
 
 	dbConfig := pgClient.Config{Name: defDB}

@@ -34,6 +34,7 @@ import (
 	"github.com/mainflux/mainflux/pkg/messaging/brokers"
 	pstracing "github.com/mainflux/mainflux/pkg/messaging/tracing"
 	"github.com/mainflux/mainflux/pkg/ulid"
+	"github.com/mainflux/mainflux/pkg/uuid"
 )
 
 const (
@@ -45,12 +46,12 @@ const (
 )
 
 type config struct {
-	LogLevel      string `env:"MF_SMPP_NOTIFIER_LOG_LEVEL"   envDefault:"info"`
-	From          string `env:"MF_SMPP_NOTIFIER_FROM_ADDR"   envDefault:""`
-	ConfigPath    string `env:"MF_SMPP_NOTIFIER_CONFIG_PATH" envDefault:"/config.toml"`
-	BrokerURL     string `env:"MF_BROKER_URL"                envDefault:"nats://localhost:4222"`
-	JaegerURL     string `env:"MF_JAEGER_URL"                envDefault:"http://jaeger:14268/api/traces"`
-	SendTelemetry bool   `env:"MF_SEND_TELEMETRY"            envDefault:"true"`
+	LogLevel      string `env:"MF_SMPP_NOTIFIER_LOG_LEVEL"     envDefault:"info"`
+	From          string `env:"MF_SMPP_NOTIFIER_FROM_ADDR"     envDefault:""`
+	ConfigPath    string `env:"MF_SMPP_NOTIFIER_CONFIG_PATH"   envDefault:"/config.toml"`
+	BrokerURL     string `env:"MF_BROKER_URL"                  envDefault:"nats://localhost:4222"`
+	JaegerURL     string `env:"MF_JAEGER_URL"                  envDefault:"http://jaeger:14268/api/traces"`
+	SendTelemetry bool   `env:"MF_SEND_TELEMETRY"              envDefault:"true"`
 	InstanceID    string `env:"MF_SMPP_NOTIFIER_INSTANCE_ID"   envDefault:""`
 }
 
@@ -66,6 +67,14 @@ func main() {
 	logger, err := mflog.New(os.Stdout, cfg.LogLevel)
 	if err != nil {
 		log.Fatalf("failed to init logger: %s", err)
+	}
+
+	instanceID := cfg.InstanceID
+	if instanceID == "" {
+		instanceID, err = uuid.New().ID()
+		if err != nil {
+			log.Fatalf("Failed to generate instanceID: %s", err)
+		}
 	}
 
 	dbConfig := pgClient.Config{Name: defDB}

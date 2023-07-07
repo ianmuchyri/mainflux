@@ -52,7 +52,7 @@ var (
 // MakeHandler returns a HTTP handler for API endpoints.
 func MakeHandler(instanceID string) http.Handler {
 	b := bone.New()
-	b.GetFunc("/health", mainflux.Health(protocol))
+	b.GetFunc("/health", mainflux.Health(protocol, instanceID))
 	b.Handle("/metrics", promhttp.Handler())
 
 	return b

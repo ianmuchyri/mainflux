@@ -36,6 +36,7 @@ const (
 	mqttProt      = "mqtt"
 	httpProt      = "http"
 	msgName       = "temperature"
+	instanceID    = "5de9b29a-feb9-11ed-be56-0242ac120002"
 )
 
 var (

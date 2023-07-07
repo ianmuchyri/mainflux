@@ -51,6 +51,7 @@ const (
 	addExternalKey = "external-key"
 	addName        = "name"
 	addContent     = "config"
+	instanceID     = "5de9b29a-feb9-11ed-be56-0242ac120002"
 )
 
 var (
