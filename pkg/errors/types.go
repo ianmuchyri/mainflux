@@ -42,4 +42,7 @@ var (
 
 	// ErrScanMetadata indicates problem with metadata in db.
 	ErrScanMetadata = New("failed to scan metadata in db")
+
+	//ErrSecretError indicates an error with the entity secret
+	ErrSecretError = New("invalid entity secret")
 )
