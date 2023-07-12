@@ -315,7 +315,7 @@ func (svc service) UpdateClientSecret(ctx context.Context, token, oldSecret, new
 		return mfclients.Client{}, err
 	}
 	if _, err := svc.IssueToken(ctx, dbClient.Credentials.Identity, oldSecret); err != nil {
-		return mfclients.Client{}, errors.ErrSecretError
+		return mfclients.Client{}, err
 	}
 	newSecret, err = svc.hasher.Hash(newSecret)
 	if err != nil {
