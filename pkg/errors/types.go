@@ -43,6 +43,6 @@ var (
 	// ErrScanMetadata indicates problem with metadata in db.
 	ErrScanMetadata = New("failed to scan metadata in db")
 
-	//ErrSecretError indicates a wrong secret was provided.
+	//ErrWrongSecret indicates a wrong secret was provided.
 	ErrWrongSecret = New("wrong secret")
 )
