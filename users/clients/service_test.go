@@ -860,6 +860,62 @@ func TestUpdateClientOwner(t *testing.T) {
 	}
 }
 
+func TestResetSecret(t *testing.T) {
+	cRepo := new(mocks.Repository)
+	pRepo := new(pmocks.Repository)
+	tokenizer := jwt.NewRepository([]byte(secret), accessDuration, refreshDuration)
+	e := mocks.NewEmailer()
+	svc := clients.NewService(cRepo, pRepo, tokenizer, e, phasher, idProvider, passRegex)
+
+	rClient := client
+	rClient.Credentials.Secret, _ = phasher.Hash(client.Credentials.Secret)
+
+	repoCall := cRepo.On("RetrieveByIdentity", context.Background(), client.Credentials.Identity).Return(rClient, nil)
+	token, err := svc.IssueToken(context.Background(), client.Credentials.Identity, client.Credentials.Secret)
+	assert.Nil(t, err, fmt.Sprintf("Issue token expected nil got %s\n", err))
+	repoCall.Unset()
+
+	cases := []struct {
+		desc       string
+		resetToken string
+		secret     string
+		err        error
+		response   mfclients.Client
+	}{
+		{
+			desc:       "reset client secret with valid token",
+			secret:     client.Credentials.Secret,
+			resetToken: token.AccessToken,
+			err:        nil,
+			response:   rClient,
+		},
+		{
+			desc:       "reset client secret with invalid token",
+			secret:     client.Credentials.Secret,
+			resetToken: inValidToken,
+			response:   rClient,
+			err:        errors.ErrAuthentication,
+		},
+	}
+
+	for _, tc := range cases {
+		repoCall := cRepo.On("RetrieveByID", context.Background(), client.ID).Return(tc.response, tc.err)
+		repoCall1 := cRepo.On("UpdateSecret", context.Background(), mock.Anything).Return(tc.response, tc.err)
+		err := svc.ResetSecret(context.Background(), tc.resetToken, tc.secret)
+		assert.True(t, errors.Contains(err, tc.err), fmt.Sprintf("%s: expected %s got %s\n", tc.desc, tc.err, err))
+		if tc.err == nil {
+			ok := repoCall.Parent.AssertCalled(t, "RetrieveByID", context.Background(), client.ID)
+			assert.True(t, ok, fmt.Sprintf("RetrieveByID was not called on %s", tc.desc))
+			ok = repoCall1.Parent.AssertCalled(t, "UpdateSecret", context.Background(), mock.Anything)
+			assert.True(t, ok, fmt.Sprintf("UpdateSecret was not called on %s", tc.desc))
+		}
+		repoCall.Unset()
+		repoCall1.Unset()
+
+	}
+
+}
+
 func TestUpdateClientSecret(t *testing.T) {
 	cRepo := new(mocks.Repository)
 	pRepo := new(pmocks.Repository)
