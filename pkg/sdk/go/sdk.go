@@ -200,14 +200,14 @@ type SDK interface {
 	//  fmt.Println(user)
 	UpdateUserOwner(user User, token string) (User, errors.SDKError)
 
-	//ResetPasswordRequest sends a password request email to a user.
+	// ResetPasswordRequest sends a password request email to a user.
 	//
 	// example:
 	//err:= sdk.ResetPasswordRequest("example@email.com")
 	//fmt.Println(err)
 	ResetPasswordRequest(email string) errors.SDKError
 
-	//ResetPassword changes a user's password to the one passed in the argument.
+	// ResetPassword changes a user's password to the one passed in the argument.
 	//
 	// example:
 	//err:=sdk.ResetPassword("token","password","password")
