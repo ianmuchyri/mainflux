@@ -203,15 +203,15 @@ type SDK interface {
 	// ResetPasswordRequest sends a password request email to a user.
 	//
 	// example:
-	//err:= sdk.ResetPasswordRequest("example@email.com")
-	//fmt.Println(err)
+	//  err:= sdk.ResetPasswordRequest("example@email.com")
+	//  fmt.Println(err)
 	ResetPasswordRequest(email string) errors.SDKError
 
 	// ResetPassword changes a user's password to the one passed in the argument.
 	//
 	// example:
-	//err:=sdk.ResetPassword("token","password","password")
-	//fmt.Println(err)
+	//  err:=sdk.ResetPassword("token","password","password")
+	//  fmt.Println(err)
 	ResetPassword(token, password, confPass string) errors.SDKError
 
 	// UpdatePassword updates user password.
