@@ -1024,6 +1024,8 @@ func (sdk mfSDK) processRequest(method, url, token string, data []byte, requestH
 		return make(http.Header), []byte{}, errors.NewSDKError(err)
 	}
 
+	// Sets a default value for the Content-Type.
+	// Overridden if Content-Type is passes in the requestHeaders() arguments.
 	req.Header.Add("Content-Type", string(CTJSON))
 
 	for key, value := range requestHeaders {
