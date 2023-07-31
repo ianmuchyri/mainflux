@@ -43,6 +43,8 @@ var (
 	passRegex       = regexp.MustCompile("^.{8,}$")
 	accessDuration  = time.Minute * 1
 	refreshDuration = time.Minute * 10
+	host            = "example.com"
+	invalidEmail    = "invalidEmail@example.com"
 )
 
 func TestRegisterClient(t *testing.T) {
@@ -854,6 +856,67 @@ func TestUpdateClientOwner(t *testing.T) {
 			assert.True(t, ok, fmt.Sprintf("CheckAdmin was not called on %s", tc.desc))
 			ok = repoCall1.Parent.AssertCalled(t, "UpdateOwner", context.Background(), mock.Anything)
 			assert.True(t, ok, fmt.Sprintf("UpdateOwner was not called on %s", tc.desc))
+		}
+		repoCall.Unset()
+		repoCall1.Unset()
+	}
+}
+
+func TestGenerateResetToken(t *testing.T) {
+	cRepo := new(mocks.Repository)
+	pRepo := new(pmocks.Repository)
+	tokenizer := jwt.NewRepository([]byte(secret), accessDuration, refreshDuration)
+	e := mocks.NewEmailer()
+	svc := clients.NewService(cRepo, pRepo, tokenizer, e, phasher, idProvider, passRegex)
+
+	rClient := client
+
+	repoCall := cRepo.On("RetrieveByIdentity", context.Background(), client.Credentials.Identity).Return(rClient, nil)
+	claims := jwt.Claims{
+		ClientID: client.ID,
+		Email:    client.Credentials.Identity,
+	}
+	token, err := tokenizer.Issue(context.Background(), claims)
+	assert.Nil(t, err, fmt.Sprintf("Issue token expected nil got %s\n", err))
+	repoCall.Unset()
+
+	cases := []struct {
+		desc        string
+		email       string
+		host        string
+		accessToken string
+		err         error
+		response    mfclients.Client
+	}{
+		{
+			desc:        "Generate reset token with valid email",
+			email:       client.Credentials.Identity,
+			host:        host,
+			accessToken: token.AccessToken,
+			err:         nil,
+			response:    rClient,
+		},
+		{
+			desc:        "Generate reset token with invalid email",
+			email:       invalidEmail,
+			host:        host,
+			accessToken: token.AccessToken,
+			err:         errors.ErrNotFound,
+			response:    rClient,
+		},
+	}
+
+	for _, tc := range cases {
+		repoCall := cRepo.On("RetrieveByIdentity", context.Background(), tc.email).Return(tc.response, tc.err)
+		repoCall1 := cRepo.On("SendPasswordReset", context.Background(), tc.host, tc.email, tc.response.Name, tc.accessToken).Return(tc.err)
+		err := svc.GenerateResetToken(context.Background(), tc.email, tc.host)
+		assert.True(t, errors.Contains(err, tc.err), fmt.Sprintf("%s: expected %s got %s\n", tc.desc, tc.err, err))
+		if tc.err == nil {
+			ok := repoCall.Parent.AssertCalled(t, "RetrieveByIdentity", context.Background(), tc.email)
+			assert.True(t, ok, fmt.Sprintf("RetrieveByIdentity was not called on %s", tc.desc))
+
+			ok = repoCall.Parent.AssertCalled(t, "SendPasswordReset", context.Background(), tc.host, tc.email, tc.response.Name, tc.accessToken)
+			assert.True(t, ok, fmt.Sprintf("SendPasswordReset was not called on %s", tc.desc))
 		}
 		repoCall.Unset()
 		repoCall1.Unset()
