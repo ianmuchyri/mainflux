@@ -915,7 +915,7 @@ func TestGenerateResetToken(t *testing.T) {
 			ok := repoCall.Parent.AssertCalled(t, "RetrieveByIdentity", context.Background(), tc.email)
 			assert.True(t, ok, fmt.Sprintf("RetrieveByIdentity was not called on %s", tc.desc))
 
-			ok = repoCall.Parent.AssertCalled(t, "SendPasswordReset", context.Background(), tc.host, tc.email, tc.response.Name, tc.accessToken)
+			ok = repoCall1.Parent.AssertCalled(t, "SendPasswordReset", context.Background(), tc.host, tc.email, tc.response.Name, tc.accessToken)
 			assert.True(t, ok, fmt.Sprintf("SendPasswordReset was not called on %s", tc.desc))
 		}
 		repoCall.Unset()
