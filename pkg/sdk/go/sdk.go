@@ -1024,6 +1024,8 @@ func (sdk mfSDK) processRequest(method, url, token, contentType string, data []b
 		return make(http.Header), []byte{}, errors.NewSDKError(err)
 	}
 
+	req.Header.Add("Referer", sdk.HostURL)
+
 	if token != "" {
 		if !strings.Contains(token, ThingPrefix) {
 			token = BearerPrefix + token

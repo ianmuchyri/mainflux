@@ -190,7 +190,7 @@ func (sdk mfSDK) UpdateUserIdentity(user User, token string) (User, errors.SDKEr
 }
 
 func (sdk mfSDK) ResetPasswordRequest(email string) errors.SDKError {
-	var rpr = resetPasswordRequestreq{Email: email, Host: sdk.HostURL}
+	var rpr = resetPasswordRequestreq{Email: email}
 
 	data, err := json.Marshal(rpr)
 	if err != nil {
