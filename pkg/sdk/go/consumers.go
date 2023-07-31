@@ -35,10 +35,7 @@ func (sdk mfSDK) CreateSubscription(topic, contact, token string) (string, error
 
 	url := fmt.Sprintf("%s/%s", sdk.usersURL, subscriptionEndpoint)
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	headers, _, sdkerr := sdk.processRequest(http.MethodPost, url, token, data, header, http.StatusCreated)
+	headers, _, sdkerr := sdk.processRequest(http.MethodPost, url, token, data, nil, http.StatusCreated)
 	if sdkerr != nil {
 		return "", sdkerr
 	}
@@ -54,10 +51,7 @@ func (sdk mfSDK) ListSubscriptions(pm PageMetadata, token string) (SubscriptionP
 		return SubscriptionPage{}, errors.NewSDKError(err)
 	}
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, body, err := sdk.processRequest(http.MethodGet, url, token, nil, header, http.StatusOK)
+	_, body, err := sdk.processRequest(http.MethodGet, url, token, nil, nil, http.StatusOK)
 	if err != nil {
 		return SubscriptionPage{}, errors.NewSDKError(err)
 	}
@@ -73,10 +67,7 @@ func (sdk mfSDK) ListSubscriptions(pm PageMetadata, token string) (SubscriptionP
 func (sdk mfSDK) ViewSubscription(id, token string) (Subscription, errors.SDKError) {
 	url := fmt.Sprintf("%s/%s/%s", sdk.usersURL, subscriptionEndpoint, id)
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, body, err := sdk.processRequest(http.MethodGet, url, token, nil, header, http.StatusOK)
+	_, body, err := sdk.processRequest(http.MethodGet, url, token, nil, nil, http.StatusOK)
 	if err != nil {
 		return Subscription{}, err
 	}
@@ -92,10 +83,7 @@ func (sdk mfSDK) ViewSubscription(id, token string) (Subscription, errors.SDKErr
 func (sdk mfSDK) DeleteSubscription(id, token string) errors.SDKError {
 	url := fmt.Sprintf("%s/%s/%s", sdk.usersURL, subscriptionEndpoint, id)
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, _, err := sdk.processRequest(http.MethodDelete, url, token, nil, header, http.StatusNoContent)
+	_, _, err := sdk.processRequest(http.MethodDelete, url, token, nil, nil, http.StatusNoContent)
 
 	return err
 }

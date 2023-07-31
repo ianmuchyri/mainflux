@@ -38,10 +38,7 @@ func (sdk mfSDK) IssueCert(thingID, valid, token string) (Cert, errors.SDKError)
 
 	url := fmt.Sprintf("%s/%s", sdk.certsURL, certsEndpoint)
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, body, sdkerr := sdk.processRequest(http.MethodPost, url, token, d, header, http.StatusCreated)
+	_, body, sdkerr := sdk.processRequest(http.MethodPost, url, token, d, nil, http.StatusCreated)
 	if sdkerr != nil {
 		return Cert{}, sdkerr
 	}
@@ -57,10 +54,7 @@ func (sdk mfSDK) IssueCert(thingID, valid, token string) (Cert, errors.SDKError)
 func (sdk mfSDK) ViewCert(id, token string) (Cert, errors.SDKError) {
 	url := fmt.Sprintf("%s/%s/%s", sdk.certsURL, certsEndpoint, id)
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, body, err := sdk.processRequest(http.MethodGet, url, token, nil, header, http.StatusOK)
+	_, body, err := sdk.processRequest(http.MethodGet, url, token, nil, nil, http.StatusOK)
 	if err != nil {
 		return Cert{}, err
 	}
@@ -76,10 +70,7 @@ func (sdk mfSDK) ViewCert(id, token string) (Cert, errors.SDKError) {
 func (sdk mfSDK) ViewCertByThing(thingID, token string) (CertSerials, errors.SDKError) {
 	url := fmt.Sprintf("%s/%s/%s", sdk.certsURL, serialsEndpoint, thingID)
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, body, err := sdk.processRequest(http.MethodGet, url, token, nil, header, http.StatusOK)
+	_, body, err := sdk.processRequest(http.MethodGet, url, token, nil, nil, http.StatusOK)
 	if err != nil {
 		return CertSerials{}, err
 	}
@@ -95,10 +86,7 @@ func (sdk mfSDK) ViewCertByThing(thingID, token string) (CertSerials, errors.SDK
 func (sdk mfSDK) RevokeCert(id, token string) (time.Time, errors.SDKError) {
 	url := fmt.Sprintf("%s/%s/%s", sdk.certsURL, certsEndpoint, id)
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, body, err := sdk.processRequest(http.MethodDelete, url, token, nil, header, http.StatusOK)
+	_, body, err := sdk.processRequest(http.MethodDelete, url, token, nil, nil, http.StatusOK)
 	if err != nil {
 		return time.Time{}, err
 	}

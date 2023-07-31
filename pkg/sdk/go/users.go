@@ -41,10 +41,7 @@ func (sdk mfSDK) CreateUser(user User, token string) (User, errors.SDKError) {
 
 	url := fmt.Sprintf("%s/%s", sdk.usersURL, usersEndpoint)
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, body, sdkerr := sdk.processRequest(http.MethodPost, url, token, data, header, http.StatusCreated)
+	_, body, sdkerr := sdk.processRequest(http.MethodPost, url, token, data, nil, http.StatusCreated)
 	if sdkerr != nil {
 		return User{}, sdkerr
 	}
@@ -63,10 +60,7 @@ func (sdk mfSDK) Users(pm PageMetadata, token string) (UsersPage, errors.SDKErro
 		return UsersPage{}, errors.NewSDKError(err)
 	}
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, body, sdkerr := sdk.processRequest(http.MethodGet, url, token, nil, header, http.StatusOK)
+	_, body, sdkerr := sdk.processRequest(http.MethodGet, url, token, nil, nil, http.StatusOK)
 	if sdkerr != nil {
 		return UsersPage{}, sdkerr
 	}
@@ -85,10 +79,7 @@ func (sdk mfSDK) Members(groupID string, meta PageMetadata, token string) (Membe
 		return MembersPage{}, errors.NewSDKError(err)
 	}
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, body, sdkerr := sdk.processRequest(http.MethodGet, url, token, nil, header, http.StatusOK)
+	_, body, sdkerr := sdk.processRequest(http.MethodGet, url, token, nil, nil, http.StatusOK)
 	if sdkerr != nil {
 		return MembersPage{}, sdkerr
 	}
@@ -104,10 +95,7 @@ func (sdk mfSDK) Members(groupID string, meta PageMetadata, token string) (Membe
 func (sdk mfSDK) User(id, token string) (User, errors.SDKError) {
 	url := fmt.Sprintf("%s/%s/%s", sdk.usersURL, usersEndpoint, id)
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, body, sdkerr := sdk.processRequest(http.MethodGet, url, token, nil, header, http.StatusOK)
+	_, body, sdkerr := sdk.processRequest(http.MethodGet, url, token, nil, nil, http.StatusOK)
 	if sdkerr != nil {
 		return User{}, sdkerr
 	}
@@ -123,10 +111,7 @@ func (sdk mfSDK) User(id, token string) (User, errors.SDKError) {
 func (sdk mfSDK) UserProfile(token string) (User, errors.SDKError) {
 	url := fmt.Sprintf("%s/%s/profile", sdk.usersURL, usersEndpoint)
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, body, sdkerr := sdk.processRequest(http.MethodGet, url, token, nil, header, http.StatusOK)
+	_, body, sdkerr := sdk.processRequest(http.MethodGet, url, token, nil, nil, http.StatusOK)
 	if sdkerr != nil {
 		return User{}, sdkerr
 	}
@@ -147,10 +132,7 @@ func (sdk mfSDK) UpdateUser(user User, token string) (User, errors.SDKError) {
 
 	url := fmt.Sprintf("%s/%s/%s", sdk.usersURL, usersEndpoint, user.ID)
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, body, sdkerr := sdk.processRequest(http.MethodPatch, url, token, data, header, http.StatusOK)
+	_, body, sdkerr := sdk.processRequest(http.MethodPatch, url, token, data, nil, http.StatusOK)
 	if sdkerr != nil {
 		return User{}, sdkerr
 	}
@@ -171,10 +153,7 @@ func (sdk mfSDK) UpdateUserTags(user User, token string) (User, errors.SDKError)
 
 	url := fmt.Sprintf("%s/%s/%s/tags", sdk.usersURL, usersEndpoint, user.ID)
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, body, sdkerr := sdk.processRequest(http.MethodPatch, url, token, data, header, http.StatusOK)
+	_, body, sdkerr := sdk.processRequest(http.MethodPatch, url, token, data, nil, http.StatusOK)
 	if sdkerr != nil {
 		return User{}, sdkerr
 	}
@@ -197,10 +176,7 @@ func (sdk mfSDK) UpdateUserIdentity(user User, token string) (User, errors.SDKEr
 
 	url := fmt.Sprintf("%s/%s/%s/identity", sdk.usersURL, usersEndpoint, user.ID)
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, body, sdkerr := sdk.processRequest(http.MethodPatch, url, token, data, header, http.StatusOK)
+	_, body, sdkerr := sdk.processRequest(http.MethodPatch, url, token, data, nil, http.StatusOK)
 	if sdkerr != nil {
 		return User{}, sdkerr
 	}
@@ -223,7 +199,6 @@ func (sdk mfSDK) ResetPasswordRequest(email string) errors.SDKError {
 	url := fmt.Sprintf("%s/%s/reset-request", sdk.usersURL, PasswordResetEndpoint)
 
 	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
 	header["Referer"] = sdk.HostURL
 
 	_, _, sdkerr := sdk.processRequest(http.MethodPost, url, "", data, header, http.StatusCreated)
@@ -240,10 +215,7 @@ func (sdk mfSDK) ResetPassword(token, password, confPass string) errors.SDKError
 	}
 	url := fmt.Sprintf("%s/%s/reset", sdk.usersURL, PasswordResetEndpoint)
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, _, sdkerr := sdk.processRequest(http.MethodPut, url, "", data, header, http.StatusCreated)
+	_, _, sdkerr := sdk.processRequest(http.MethodPut, url, "", data, nil, http.StatusCreated)
 
 	return sdkerr
 }
@@ -258,10 +230,7 @@ func (sdk mfSDK) UpdatePassword(oldPass, newPass, token string) (User, errors.SD
 
 	url := fmt.Sprintf("%s/%s/secret", sdk.usersURL, usersEndpoint)
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, body, sdkerr := sdk.processRequest(http.MethodPatch, url, token, data, header, http.StatusOK)
+	_, body, sdkerr := sdk.processRequest(http.MethodPatch, url, token, data, nil, http.StatusOK)
 	if sdkerr != nil {
 		return User{}, sdkerr
 	}
@@ -282,10 +251,7 @@ func (sdk mfSDK) UpdateUserOwner(user User, token string) (User, errors.SDKError
 
 	url := fmt.Sprintf("%s/%s/%s/owner", sdk.usersURL, usersEndpoint, user.ID)
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, body, sdkerr := sdk.processRequest(http.MethodPatch, url, token, data, header, http.StatusOK)
+	_, body, sdkerr := sdk.processRequest(http.MethodPatch, url, token, data, nil, http.StatusOK)
 	if sdkerr != nil {
 		return User{}, sdkerr
 	}
@@ -309,10 +275,7 @@ func (sdk mfSDK) DisableUser(id, token string) (User, errors.SDKError) {
 func (sdk mfSDK) changeClientStatus(token, id, status string) (User, errors.SDKError) {
 	url := fmt.Sprintf("%s/%s/%s/%s", sdk.usersURL, usersEndpoint, id, status)
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, body, sdkerr := sdk.processRequest(http.MethodPost, url, token, nil, header, http.StatusOK)
+	_, body, sdkerr := sdk.processRequest(http.MethodPost, url, token, nil, nil, http.StatusOK)
 	if sdkerr != nil {
 		return User{}, sdkerr
 	}

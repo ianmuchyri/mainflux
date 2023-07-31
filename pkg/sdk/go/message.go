@@ -24,10 +24,7 @@ func (sdk mfSDK) SendMessage(chanName, msg, key string) errors.SDKError {
 
 	url := fmt.Sprintf("%s/channels/%s/messages%s", sdk.httpAdapterURL, chanID, subtopicPart)
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, _, err := sdk.processRequest(http.MethodPost, url, ThingPrefix+key, []byte(msg), header, http.StatusAccepted)
+	_, _, err := sdk.processRequest(http.MethodPost, url, ThingPrefix+key, []byte(msg), nil, http.StatusAccepted)
 
 	return err
 }

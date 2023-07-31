@@ -1024,6 +1024,8 @@ func (sdk mfSDK) processRequest(method, url, token string, data []byte, requestH
 		return make(http.Header), []byte{}, errors.NewSDKError(err)
 	}
 
+	req.Header.Add("Content-Type", string(CTJSON))
+
 	for key, value := range requestHeaders {
 		req.Header.Add(key, value)
 	}

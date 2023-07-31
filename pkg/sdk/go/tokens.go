@@ -28,10 +28,7 @@ func (sdk mfSDK) CreateToken(user User) (Token, errors.SDKError) {
 
 	url := fmt.Sprintf("%s/%s/%s", sdk.usersURL, usersEndpoint, issueTokenEndpoint)
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, body, sdkerr := sdk.processRequest(http.MethodPost, url, "", data, header, http.StatusCreated)
+	_, body, sdkerr := sdk.processRequest(http.MethodPost, url, "", data, nil, http.StatusCreated)
 	if sdkerr != nil {
 		return Token{}, sdkerr
 	}
@@ -46,10 +43,7 @@ func (sdk mfSDK) CreateToken(user User) (Token, errors.SDKError) {
 func (sdk mfSDK) RefreshToken(token string) (Token, errors.SDKError) {
 	url := fmt.Sprintf("%s/%s/%s", sdk.usersURL, usersEndpoint, refreshTokenEndpoint)
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, body, sdkerr := sdk.processRequest(http.MethodPost, url, token, []byte{}, header, http.StatusCreated)
+	_, body, sdkerr := sdk.processRequest(http.MethodPost, url, token, []byte{}, nil, http.StatusCreated)
 	if sdkerr != nil {
 		return Token{}, sdkerr
 	}

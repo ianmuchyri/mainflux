@@ -40,10 +40,7 @@ func (sdk mfSDK) AuthorizeUser(accessReq AccessRequest, token string) (bool, err
 
 	url := fmt.Sprintf("%s/%s", sdk.usersURL, authorizeEndpoint)
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, _, sdkerr := sdk.processRequest(http.MethodPost, url, token, data, header, http.StatusOK)
+	_, _, sdkerr := sdk.processRequest(http.MethodPost, url, token, data, nil, http.StatusOK)
 	if sdkerr != nil {
 		return false, sdkerr
 	}
@@ -59,10 +56,7 @@ func (sdk mfSDK) CreateUserPolicy(p Policy, token string) errors.SDKError {
 
 	url := fmt.Sprintf("%s/%s", sdk.usersURL, policyEndpoint)
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, _, sdkerr := sdk.processRequest(http.MethodPost, url, token, data, header, http.StatusCreated)
+	_, _, sdkerr := sdk.processRequest(http.MethodPost, url, token, data, nil, http.StatusCreated)
 	if sdkerr != nil {
 		return sdkerr
 	}
@@ -78,10 +72,7 @@ func (sdk mfSDK) UpdateUserPolicy(p Policy, token string) errors.SDKError {
 
 	url := fmt.Sprintf("%s/%s", sdk.usersURL, policyEndpoint)
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, _, sdkerr := sdk.processRequest(http.MethodPut, url, token, data, header, http.StatusNoContent)
+	_, _, sdkerr := sdk.processRequest(http.MethodPut, url, token, data, nil, http.StatusNoContent)
 	if sdkerr != nil {
 		return sdkerr
 	}
@@ -95,10 +86,7 @@ func (sdk mfSDK) ListUserPolicies(pm PageMetadata, token string) (PolicyPage, er
 		return PolicyPage{}, errors.NewSDKError(err)
 	}
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, body, sdkerr := sdk.processRequest(http.MethodGet, url, token, nil, header, http.StatusOK)
+	_, body, sdkerr := sdk.processRequest(http.MethodGet, url, token, nil, nil, http.StatusOK)
 	if sdkerr != nil {
 		return PolicyPage{}, sdkerr
 	}
@@ -114,10 +102,7 @@ func (sdk mfSDK) ListUserPolicies(pm PageMetadata, token string) (PolicyPage, er
 func (sdk mfSDK) DeleteUserPolicy(p Policy, token string) errors.SDKError {
 	url := fmt.Sprintf("%s/%s/%s/%s", sdk.usersURL, policyEndpoint, p.Subject, p.Object)
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, _, sdkerr := sdk.processRequest(http.MethodDelete, url, token, nil, header, http.StatusNoContent)
+	_, _, sdkerr := sdk.processRequest(http.MethodDelete, url, token, nil, nil, http.StatusNoContent)
 
 	return sdkerr
 }
@@ -130,10 +115,7 @@ func (sdk mfSDK) CreateThingPolicy(p Policy, token string) errors.SDKError {
 
 	url := fmt.Sprintf("%s/%s", sdk.thingsURL, policyEndpoint)
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, _, sdkerr := sdk.processRequest(http.MethodPost, url, token, data, header, http.StatusCreated)
+	_, _, sdkerr := sdk.processRequest(http.MethodPost, url, token, data, nil, http.StatusCreated)
 	if sdkerr != nil {
 		return sdkerr
 	}
@@ -149,10 +131,7 @@ func (sdk mfSDK) UpdateThingPolicy(p Policy, token string) errors.SDKError {
 
 	url := fmt.Sprintf("%s/%s", sdk.thingsURL, policyEndpoint)
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, _, sdkerr := sdk.processRequest(http.MethodPut, url, token, data, header, http.StatusNoContent)
+	_, _, sdkerr := sdk.processRequest(http.MethodPut, url, token, data, nil, http.StatusNoContent)
 	if sdkerr != nil {
 		return sdkerr
 	}
@@ -166,10 +145,7 @@ func (sdk mfSDK) ListThingPolicies(pm PageMetadata, token string) (PolicyPage, e
 		return PolicyPage{}, errors.NewSDKError(err)
 	}
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, body, sdkerr := sdk.processRequest(http.MethodGet, url, token, nil, header, http.StatusOK)
+	_, body, sdkerr := sdk.processRequest(http.MethodGet, url, token, nil, nil, http.StatusOK)
 	if sdkerr != nil {
 		return PolicyPage{}, sdkerr
 	}
@@ -185,10 +161,7 @@ func (sdk mfSDK) ListThingPolicies(pm PageMetadata, token string) (PolicyPage, e
 func (sdk mfSDK) DeleteThingPolicy(p Policy, token string) errors.SDKError {
 	url := fmt.Sprintf("%s/%s/%s/%s", sdk.thingsURL, policyEndpoint, p.Subject, p.Object)
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, _, sdkerr := sdk.processRequest(http.MethodDelete, url, token, nil, header, http.StatusNoContent)
+	_, _, sdkerr := sdk.processRequest(http.MethodDelete, url, token, nil, nil, http.StatusNoContent)
 
 	return sdkerr
 }
@@ -219,10 +192,7 @@ func (sdk mfSDK) Connect(connIDs ConnectionIDs, token string) errors.SDKError {
 
 	url := fmt.Sprintf("%s/%s", sdk.thingsURL, connectEndpoint)
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, _, sdkerr := sdk.processRequest(http.MethodPost, url, token, data, header, http.StatusOK)
+	_, _, sdkerr := sdk.processRequest(http.MethodPost, url, token, data, nil, http.StatusOK)
 
 	return sdkerr
 }
@@ -235,10 +205,7 @@ func (sdk mfSDK) Disconnect(connIDs ConnectionIDs, token string) errors.SDKError
 
 	url := fmt.Sprintf("%s/%s", sdk.thingsURL, disconnectEndpoint)
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, _, sdkerr := sdk.processRequest(http.MethodPost, url, token, data, header, http.StatusNoContent)
+	_, _, sdkerr := sdk.processRequest(http.MethodPost, url, token, data, nil, http.StatusNoContent)
 
 	return sdkerr
 }
@@ -269,10 +236,7 @@ func (sdk mfSDK) AuthorizeThing(accessReq AccessRequest, token string) (bool, st
 
 	url := fmt.Sprintf("%s/%s/%s/%s", sdk.thingsURL, channelsEndpoint, accessReq.Object, accessEndpoint)
 
-	header := make(map[string]string)
-	header["Content-Type"] = string(CTJSON)
-
-	_, body, sdkerr := sdk.processRequest(http.MethodPost, url, token, data, header, http.StatusOK)
+	_, body, sdkerr := sdk.processRequest(http.MethodPost, url, token, data, nil, http.StatusOK)
 	if sdkerr != nil {
 		return false, "", sdkerr
 	}
