@@ -1018,22 +1018,21 @@ func NewSDK(conf Config) SDK {
 
 // processRequest creates and send a new HTTP request, and checks for errors in the HTTP response.
 // It then returns the response headers, the response body, and the associated error(s) (if any).
-func (sdk mfSDK) processRequest(method, url, token, contentType string, data []byte, expectedRespCodes ...int) (http.Header, []byte, errors.SDKError) {
+func (sdk mfSDK) processRequest(method, url, token string, data []byte, requestHeaders map[string]string, expectedRespCodes ...int) (http.Header, []byte, errors.SDKError) {
 	req, err := http.NewRequest(method, url, bytes.NewReader(data))
 	if err != nil {
 		return make(http.Header), []byte{}, errors.NewSDKError(err)
 	}
 
-	req.Header.Add("Referer", sdk.HostURL)
+	for key, value := range requestHeaders {
+		req.Header.Add(key, value)
+	}
 
 	if token != "" {
 		if !strings.Contains(token, ThingPrefix) {
 			token = BearerPrefix + token
 		}
 		req.Header.Set("Authorization", token)
-	}
-	if contentType != "" {
-		req.Header.Add("Content-Type", contentType)
 	}
 
 	resp, err := sdk.client.Do(req)

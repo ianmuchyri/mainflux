@@ -34,7 +34,11 @@ func (sdk mfSDK) CreateSubscription(topic, contact, token string) (string, error
 	}
 
 	url := fmt.Sprintf("%s/%s", sdk.usersURL, subscriptionEndpoint)
-	headers, _, sdkerr := sdk.processRequest(http.MethodPost, url, token, string(CTJSON), data, http.StatusCreated)
+
+	header := make(map[string]string)
+	header["Content-Type"] = string(CTJSON)
+
+	headers, _, sdkerr := sdk.processRequest(http.MethodPost, url, token, data, header, http.StatusCreated)
 	if sdkerr != nil {
 		return "", sdkerr
 	}
@@ -49,7 +53,11 @@ func (sdk mfSDK) ListSubscriptions(pm PageMetadata, token string) (SubscriptionP
 	if err != nil {
 		return SubscriptionPage{}, errors.NewSDKError(err)
 	}
-	_, body, err := sdk.processRequest(http.MethodGet, url, token, string(CTJSON), nil, http.StatusOK)
+
+	header := make(map[string]string)
+	header["Content-Type"] = string(CTJSON)
+
+	_, body, err := sdk.processRequest(http.MethodGet, url, token, nil, header, http.StatusOK)
 	if err != nil {
 		return SubscriptionPage{}, errors.NewSDKError(err)
 	}
@@ -64,7 +72,11 @@ func (sdk mfSDK) ListSubscriptions(pm PageMetadata, token string) (SubscriptionP
 
 func (sdk mfSDK) ViewSubscription(id, token string) (Subscription, errors.SDKError) {
 	url := fmt.Sprintf("%s/%s/%s", sdk.usersURL, subscriptionEndpoint, id)
-	_, body, err := sdk.processRequest(http.MethodGet, url, token, string(CTJSON), nil, http.StatusOK)
+
+	header := make(map[string]string)
+	header["Content-Type"] = string(CTJSON)
+
+	_, body, err := sdk.processRequest(http.MethodGet, url, token, nil, header, http.StatusOK)
 	if err != nil {
 		return Subscription{}, err
 	}
@@ -80,7 +92,10 @@ func (sdk mfSDK) ViewSubscription(id, token string) (Subscription, errors.SDKErr
 func (sdk mfSDK) DeleteSubscription(id, token string) errors.SDKError {
 	url := fmt.Sprintf("%s/%s/%s", sdk.usersURL, subscriptionEndpoint, id)
 
-	_, _, err := sdk.processRequest(http.MethodDelete, url, token, string(CTJSON), nil, http.StatusNoContent)
+	header := make(map[string]string)
+	header["Content-Type"] = string(CTJSON)
+
+	_, _, err := sdk.processRequest(http.MethodDelete, url, token, nil, header, http.StatusNoContent)
 
 	return err
 }
