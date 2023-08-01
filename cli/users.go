@@ -233,7 +233,7 @@ var cmdUsers = []cobra.Command{
 		},
 	},
 	{
-		Use:   "resetpasswordrequest <email> <host>",
+		Use:   "resetpasswordrequest <email>",
 		Short: "Reset password request",
 		Long: "Reset password request\n" +
 			"Usage:\n" +
