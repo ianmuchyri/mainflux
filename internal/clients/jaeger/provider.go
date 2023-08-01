@@ -18,7 +18,7 @@ import (
 
 var (
 	errNoURL     = errors.New("URL is empty")
-	errNoSvcName = errors.New("Service Name is empty")
+	errNoSvcName = errors.New("service Name is empty")
 )
 
 // NewProvider initializes Jaeger TraceProvider.
@@ -38,7 +38,7 @@ func NewProvider(svcName, url, instanceID string) (*tracesdk.TracerProvider, err
 
 	attributes := []attribute.KeyValue{
 		semconv.ServiceNameKey.String(svcName),
-		attribute.String("InstanceID", instanceID),
+		attribute.String("host.id", instanceID),
 	}
 
 	hostAttr, err := resource.New(context.TODO(), resource.WithHost(), resource.WithOSDescription(), resource.WithContainer())
