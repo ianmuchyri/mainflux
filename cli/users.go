@@ -233,6 +233,47 @@ var cmdUsers = []cobra.Command{
 		},
 	},
 	{
+		Use:   "resetpasswordrequest <email> <host>",
+		Short: "Reset password request",
+		Long: "Reset password request\n" +
+			"Usage:\n" +
+			"\tmainflux-cli users resetpasswordrequest email host\n",
+		Run: func(cmd *cobra.Command, args []string) {
+			if len(args) != 2 {
+				logUsage(cmd.Use)
+				return
+			}
+
+			err := sdk.ResetPasswordRequest(args[0], args[1])
+			if err != nil {
+				logError(err)
+				return
+			}
+
+			logOK()
+		},
+	},
+	{
+		Use:   "resetpassword <password> <confpass> <user_auth_token>",
+		Short: "Reset password",
+		Long: "Reset password\n" +
+			"Usage:\n" +
+			"\tmainflux-cli users resetpassword password confpass $USERTOKEN\n",
+		Run: func(cmd *cobra.Command, args []string) {
+			if len(args) != 3 {
+				logUsage(cmd.Use)
+				return
+			}
+			err := sdk.ResetPassword(args[0], args[1], args[2])
+			if err != nil {
+				logError(err)
+				return
+			}
+
+			logOK()
+		},
+	},
+	{
 		Use:   "password <old_password> <password> <user_auth_token>",
 		Short: "Update password",
 		Long: "Update password\n" +

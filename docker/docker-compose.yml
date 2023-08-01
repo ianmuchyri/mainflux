@@ -184,7 +184,7 @@ services:
     networks:
       - mainflux-base-net
     volumes:
-      - ./templates/${MF_EMAIL_TEMPLATE}:/email.tmpl
+      - ./templates/${MF_USERS_RESET_PWD_TEMPLATE}:/email.tmpl
 
   jaeger:
     image: jaegertracing/all-in-one:1.38.0
