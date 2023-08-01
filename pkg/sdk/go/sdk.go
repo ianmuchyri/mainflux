@@ -203,9 +203,9 @@ type SDK interface {
 	// ResetPasswordRequest sends a password request email to a user.
 	//
 	// example:
-	//  err:= sdk.ResetPasswordRequest("example@email.com","host.com")
+	//  err:= sdk.ResetPasswordRequest("example@email.com")
 	//  fmt.Println(err)
-	ResetPasswordRequest(email, host string) errors.SDKError
+	ResetPasswordRequest(email string) errors.SDKError
 
 	// ResetPassword changes a user's password to the one passed in the argument.
 	//
@@ -974,6 +974,7 @@ type mfSDK struct {
 	readerURL      string
 	thingsURL      string
 	usersURL       string
+	HostURL        string
 
 	msgContentType ContentType
 	client         *http.Client
@@ -987,6 +988,7 @@ type Config struct {
 	ReaderURL      string
 	ThingsURL      string
 	UsersURL       string
+	HostURL        string
 
 	MsgContentType  ContentType
 	TLSVerification bool
@@ -1001,6 +1003,7 @@ func NewSDK(conf Config) SDK {
 		readerURL:      conf.ReaderURL,
 		thingsURL:      conf.ThingsURL,
 		usersURL:       conf.UsersURL,
+		HostURL:        conf.HostURL,
 
 		msgContentType: conf.MsgContentType,
 		client: &http.Client{

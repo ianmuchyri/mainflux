@@ -189,7 +189,7 @@ func (sdk mfSDK) UpdateUserIdentity(user User, token string) (User, errors.SDKEr
 	return user, nil
 }
 
-func (sdk mfSDK) ResetPasswordRequest(email, host string) errors.SDKError {
+func (sdk mfSDK) ResetPasswordRequest(email string) errors.SDKError {
 	var rpr = resetPasswordRequestreq{Email: email}
 
 	data, err := json.Marshal(rpr)
@@ -199,7 +199,7 @@ func (sdk mfSDK) ResetPasswordRequest(email, host string) errors.SDKError {
 	url := fmt.Sprintf("%s/%s/reset-request", sdk.usersURL, PasswordResetEndpoint)
 
 	var header = make(map[string]string)
-	header["Referer"] = host
+	header["Referer"] = sdk.HostURL
 
 	_, _, sdkerr := sdk.processRequest(http.MethodPost, url, "", data, header, http.StatusCreated)
 
