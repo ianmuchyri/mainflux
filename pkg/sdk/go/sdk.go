@@ -210,7 +210,7 @@ type SDK interface {
 	// ResetPassword changes a user's password to the one passed in the argument.
 	//
 	// example:
-	//  err :=sdk.ResetPassword("password","password","token")
+	//  err := sdk.ResetPassword("password","password","token")
 	//  fmt.Println(err)
 	ResetPassword(password, confPass, token string) errors.SDKError
 
