@@ -19,7 +19,6 @@ const (
 	defThingsURL    string = defURL + ":9000"
 	defBootstrapURL string = defURL + ":9013"
 	defCertsURL     string = defURL + ":9019"
-	defHostURL      string = "http://localhost"
 )
 
 func main() {
@@ -33,7 +32,7 @@ func main() {
 		CertsURL:        defCertsURL,
 		MsgContentType:  sdk.ContentType(msgContentType),
 		TLSVerification: false,
-		HostURL:         defHostURL,
+		HostURL:         defURL,
 	}
 
 	// Root

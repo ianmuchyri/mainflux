@@ -254,7 +254,7 @@ var cmdUsers = []cobra.Command{
 		},
 	},
 	{
-		Use:   "resetpassword <password> <confpass> <user_auth_token>",
+		Use:   "resetpassword <password> <confpass> <password_request_token>",
 		Short: "Reset password",
 		Long: "Reset password\n" +
 			"Usage:\n" +
