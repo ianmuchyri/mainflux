@@ -128,7 +128,7 @@ func main() {
 	rootCmd.PersistentFlags().StringVarP(
 		&sdkConf.HostURL,
 		"host-url",
-		"O",
+		"H",
 		sdkConf.HostURL,
 		"Host URL",
 	)
