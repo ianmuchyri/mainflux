@@ -234,8 +234,8 @@ var cmdUsers = []cobra.Command{
 	},
 	{
 		Use:   "resetpasswordrequest <email>",
-		Short: "Reset password request",
-		Long: "Reset password request\n" +
+		Short: "Send reset password request",
+		Long: "Send reset password request\n" +
 			"Usage:\n" +
 			"\tmainflux-cli users resetpasswordrequest example@mail.com\n",
 		Run: func(cmd *cobra.Command, args []string) {
