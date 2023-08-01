@@ -244,8 +244,7 @@ var cmdUsers = []cobra.Command{
 				return
 			}
 
-			err := sdk.ResetPasswordRequest(args[0])
-			if err != nil {
+			if err := sdk.ResetPasswordRequest(args[0]); err != nil {
 				logError(err)
 				return
 			}
@@ -264,8 +263,8 @@ var cmdUsers = []cobra.Command{
 				logUsage(cmd.Use)
 				return
 			}
-			err := sdk.ResetPassword(args[0], args[1], args[2])
-			if err != nil {
+
+			if err := sdk.ResetPassword(args[0], args[1], args[2]); err != nil {
 				logError(err)
 				return
 			}
