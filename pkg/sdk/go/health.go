@@ -36,7 +36,7 @@ func (sdk mfSDK) Health(service string) (HealthInfo, errors.SDKError) {
 		url = fmt.Sprintf("%s/health", sdk.thingsURL)
 	case "users":
 		url = fmt.Sprintf("%s/health", sdk.usersURL)
-	case "boostrap":
+	case "bootstrap":
 		url = fmt.Sprintf("%s/health", sdk.bootstrapURL)
 	}
 
