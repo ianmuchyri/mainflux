@@ -11,12 +11,13 @@ import (
 	"github.com/mainflux/mainflux/pkg/errors"
 	sdk "github.com/mainflux/mainflux/pkg/sdk/go"
 	thingsclients "github.com/mainflux/mainflux/things/clients"
-	"github.com/mainflux/mainflux/things/clients/mocks"
+	thingsclientsmock "github.com/mainflux/mainflux/things/clients/mocks"
 	gmocks "github.com/mainflux/mainflux/things/groups/mocks"
 	"github.com/mainflux/mainflux/things/policies"
 	thingspmocks "github.com/mainflux/mainflux/things/policies/mocks"
 	usersclients "github.com/mainflux/mainflux/users/clients"
 	cmocks "github.com/mainflux/mainflux/users/clients/mocks"
+	usersclientmock "github.com/mainflux/mainflux/users/clients/mocks"
 	"github.com/mainflux/mainflux/users/jwt"
 	userspmocks "github.com/mainflux/mainflux/users/policies/mocks"
 	"github.com/stretchr/testify/assert"
@@ -24,22 +25,23 @@ import (
 )
 
 func TestHealth(t *testing.T) {
-	cRepo := new(mocks.Repository)
+	thingcRepo := new(thingsclientsmock.Repository)
+	usercRepo := new(usersclientmock.Repository)
 	gRepo := new(gmocks.Repository)
 	uauth := cmocks.NewAuthService(users, map[string][]cmocks.SubjectSet{adminID: {uadminPolicy}})
-	thingCache := mocks.NewCache()
+	thingCache := thingsclientsmock.NewCache()
 	policiesCache := thingspmocks.NewCache()
 	tokenizer := jwt.NewRepository([]byte(secret), accessDuration, refreshDuration)
 
 	thingspRepo := new(thingspmocks.Repository)
 	psvc := policies.NewService(uauth, thingspRepo, policiesCache, idProvider)
 
-	thsvc := thingsclients.NewService(uauth, psvc, cRepo, gRepo, thingCache, idProvider)
+	thsvc := thingsclients.NewService(uauth, psvc, thingcRepo, gRepo, thingCache, idProvider)
 	ths := newThingsServer(thsvc, psvc)
 	defer ths.Close()
 
 	userspRepo := new(userspmocks.Repository)
-	usSvc := usersclients.NewService(cRepo, userspRepo, tokenizer, emailer, phasher, idProvider, passRegex)
+	usSvc := usersclients.NewService(usercRepo, userspRepo, tokenizer, emailer, phasher, idProvider, passRegex)
 	usclsv := newClientServer(usSvc)
 	defer usclsv.Close()
 
