@@ -20,6 +20,7 @@ import (
 	"github.com/mainflux/mainflux/users/jwt"
 	userspmocks "github.com/mainflux/mainflux/users/policies/mocks"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestHealth(t *testing.T) {
@@ -30,21 +31,27 @@ func TestHealth(t *testing.T) {
 	policiesCache := thingspmocks.NewCache()
 	tokenizer := jwt.NewRepository([]byte(secret), accessDuration, refreshDuration)
 
-	thingsPRepo := new(thingspmocks.Repository)
-	psvc := policies.NewService(uauth, thingsPRepo, policiesCache, idProvider)
+	thingspRepo := new(thingspmocks.Repository)
+	psvc := policies.NewService(uauth, thingspRepo, policiesCache, idProvider)
 
-	thSvc := thingsclients.NewService(uauth, psvc, cRepo, gRepo, thingCache, idProvider)
-	ths := newThingsServer(thSvc, psvc)
+	thsvc := thingsclients.NewService(uauth, psvc, cRepo, gRepo, thingCache, idProvider)
+	ths := newThingsServer(thsvc, psvc)
 	defer ths.Close()
 
-	usersPRepo := new(userspmocks.Repository)
-	usSvc := usersclients.NewService(cRepo, usersPRepo, tokenizer, emailer, phasher, idProvider, passRegex)
-	usClSv := newClientServer(usSvc)
-	defer usClSv.Close()
+	userspRepo := new(userspmocks.Repository)
+	usSvc := usersclients.NewService(cRepo, userspRepo, tokenizer, emailer, phasher, idProvider, passRegex)
+	usclsv := newClientServer(usSvc)
+	defer usclsv.Close()
+
+	certSvc, err := newCertService()
+	require.Nil(t, err, fmt.Sprintf("unexpected error during creating service: %s", err))
+	CertTs := newCertServer(certSvc)
+	defer CertTs.Close()
 
 	sdkConf := sdk.Config{
 		ThingsURL:       ths.URL,
-		UsersURL:        usClSv.URL,
+		UsersURL:        usclsv.URL,
+		CertsURL:        CertTs.URL,
 		MsgContentType:  contentType,
 		TLSVerification: false,
 	}
@@ -69,6 +76,13 @@ func TestHealth(t *testing.T) {
 			empty:       false,
 			err:         nil,
 			description: "users service",
+			status:      "pass",
+		},
+		"get certs service health check": {
+			service:     "certs",
+			empty:       false,
+			err:         nil,
+			description: "certs service",
 			status:      "pass",
 		},
 	}
