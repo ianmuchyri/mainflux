@@ -17,7 +17,6 @@ import (
 	thingspmocks "github.com/mainflux/mainflux/things/policies/mocks"
 	usersclients "github.com/mainflux/mainflux/users/clients"
 	cmocks "github.com/mainflux/mainflux/users/clients/mocks"
-	usersclientmock "github.com/mainflux/mainflux/users/clients/mocks"
 	"github.com/mainflux/mainflux/users/jwt"
 	userspmocks "github.com/mainflux/mainflux/users/policies/mocks"
 	"github.com/stretchr/testify/assert"
@@ -26,7 +25,7 @@ import (
 
 func TestHealth(t *testing.T) {
 	thingcRepo := new(thingsclientsmock.Repository)
-	usercRepo := new(usersclientmock.Repository)
+	usercRepo := new(cmocks.Repository)
 	gRepo := new(gmocks.Repository)
 	uauth := cmocks.NewAuthService(users, map[string][]cmocks.SubjectSet{adminID: {uadminPolicy}})
 	thingCache := thingsclientsmock.NewCache()
