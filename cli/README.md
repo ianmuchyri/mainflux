@@ -12,7 +12,7 @@ make cli
 
 ### Service
 
-#### Get Mainflux services Health Check
+#### Get Mainflux Services Health Check
 
 ```bash
 mainflux-cli health <service>
