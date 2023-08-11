@@ -14,11 +14,11 @@ import (
 )
 
 const (
-	configsEndpoint        = "/things/configs"
-	bootstrapEndpoint      = "/things/bootstrap"
-	whitelistEndpoint      = "/things/state"
-	bootstrapCertsEndpoint = "/things/configs/certs"
-	bootstrapConnEndpoint  = "/things/configs/connections"
+	configsEndpoint        = "things/configs"
+	bootstrapEndpoint      = "things/bootstrap"
+	whitelistEndpoint      = "things/state"
+	bootstrapCertsEndpoint = "things/configs/certs"
+	bootstrapConnEndpoint  = "things/configs/connections"
 	secureEndpoint         = "secure"
 )
 
