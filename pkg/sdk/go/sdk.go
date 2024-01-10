@@ -98,6 +98,17 @@ type PageMetadata struct {
 	UserID          string   `json:"user_id,omitempty"`
 	DomainID        string   `json:"domain_id,omitempty"`
 	Relation        string   `json:"relation,omitempty"`
+	Subtopic        string   `json:"subtopic,omitempty"`
+	Publisher       string   `json:"publisher,omitempty"`
+	Protocol        string   `json:"protocol,omitempty"`
+	Value           float64  `json:"v,omitempty"`
+	Comparator      string   `json:"comparator,omitempty"`
+	BoolValue       bool     `json:"vb,omitempty"`
+	StringValue     string   `json:"vs,omitempty"`
+	DataValue       string   `json:"vd,omitempty"`
+	From            float64  `json:"from,omitempty"`
+	To              float64  `json:"to,omitempty"`
+	Format          string   `json:"format,omitempty"`
 }
 
 // Credentials represent client credentials: it contains
@@ -830,7 +841,7 @@ type SDK interface {
 	// example:
 	//  msgs, _ := sdk.ReadMessages("channelID", "token")
 	//  fmt.Println(msgs)
-	ReadMessages(chanID, token string) (MessagesPage, errors.SDKError)
+	ReadMessages(pm PageMetadata, chanID, token string) (MessagesPage, errors.SDKError)
 
 	// SetContentType sets message content type.
 	//

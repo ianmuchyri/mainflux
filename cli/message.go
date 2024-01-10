@@ -3,7 +3,10 @@
 
 package cli
 
-import "github.com/spf13/cobra"
+import (
+	mgxsdk "github.com/absmach/magistrala/pkg/sdk/go"
+	"github.com/spf13/cobra"
+)
 
 var cmdMessages = []cobra.Command{
 	{
@@ -29,12 +32,17 @@ var cmdMessages = []cobra.Command{
 		Short: "Read messages",
 		Long:  `Reads all channel messages`,
 		Run: func(cmd *cobra.Command, args []string) {
-			if len(args) != 2 {
+			if len(args) != 3 {
 				logUsage(cmd.Use)
 				return
 			}
 
-			m, err := sdk.ReadMessages(args[0], args[1])
+			pageMetadata := mgxsdk.PageMetadata{
+				Offset: Offset,
+				Limit:  Limit,
+			}
+
+			m, err := sdk.ReadMessages(pageMetadata, args[1], args[2])
 			if err != nil {
 				logError(err)
 				return
