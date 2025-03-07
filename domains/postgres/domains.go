@@ -582,7 +582,7 @@ func buildPageQuery(pm domains.Page) (string, error) {
 	var emq string
 
 	if pm.ID != "" {
-		query = append(query, "d.id = :id")
+		query = append(query, "d.id ILIKE '%' || :id || '%'")
 	}
 
 	if len(pm.IDs) != 0 {
@@ -596,7 +596,7 @@ func buildPageQuery(pm domains.Page) (string, error) {
 	}
 
 	if pm.Name != "" {
-		query = append(query, "d.name = :name")
+		query = append(query, "d.name ILIKE '%' || :name || '%'")
 	}
 
 	if pm.UserID != "" {
@@ -614,7 +614,7 @@ func buildPageQuery(pm domains.Page) (string, error) {
 	}
 
 	if pm.Tag != "" {
-		query = append(query, ":tag = ANY(d.tags)")
+		query = append(query, "EXISTS (SELECT 1 FROM unnest(tags) AS tag WHERE tag ILIKE '%' || :tag || '%')")
 	}
 
 	mq, _, err := postgres.CreateMetadataQuery("", pm.Metadata)

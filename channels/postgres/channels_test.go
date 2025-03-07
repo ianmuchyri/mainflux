@@ -451,20 +451,20 @@ func TestRetrieveAll(t *testing.T) {
 
 	cases := []struct {
 		desc     string
-		page     channels.Page
-		response channels.Page
+		page     channels.ChannelsPage
+		response channels.ChannelsPage
 		err      error
 	}{
 		{
 			desc: "retrieve channels successfully",
-			page: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			page: channels.ChannelsPage{
+				Page: channels.Page{
 					Offset: 0,
 					Limit:  10,
 				},
 			},
-			response: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			response: channels.ChannelsPage{
+				Page: channels.Page{
 					Total:  uint64(num),
 					Offset: 0,
 					Limit:  10,
@@ -475,14 +475,14 @@ func TestRetrieveAll(t *testing.T) {
 		},
 		{
 			desc: "retrieve channels with offset",
-			page: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			page: channels.ChannelsPage{
+				Page: channels.Page{
 					Offset: 10,
 					Limit:  10,
 				},
 			},
-			response: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			response: channels.ChannelsPage{
+				Page: channels.Page{
 					Total:  uint64(num),
 					Offset: 10,
 					Limit:  10,
@@ -493,14 +493,14 @@ func TestRetrieveAll(t *testing.T) {
 		},
 		{
 			desc: "retrieve channels with limit",
-			page: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			page: channels.ChannelsPage{
+				Page: channels.Page{
 					Offset: 0,
 					Limit:  50,
 				},
 			},
-			response: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			response: channels.ChannelsPage{
+				Page: channels.Page{
 					Total:  uint64(num),
 					Offset: 0,
 					Limit:  50,
@@ -511,14 +511,14 @@ func TestRetrieveAll(t *testing.T) {
 		},
 		{
 			desc: "retrieve channels with offset and limit",
-			page: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			page: channels.ChannelsPage{
+				Page: channels.Page{
 					Offset: 50,
 					Limit:  50,
 				},
 			},
-			response: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			response: channels.ChannelsPage{
+				Page: channels.Page{
 					Total:  uint64(num),
 					Offset: 50,
 					Limit:  50,
@@ -529,14 +529,14 @@ func TestRetrieveAll(t *testing.T) {
 		},
 		{
 			desc: "retrieve channels with offset out of range",
-			page: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			page: channels.ChannelsPage{
+				Page: channels.Page{
 					Offset: 1000,
 					Limit:  50,
 				},
 			},
-			response: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			response: channels.ChannelsPage{
+				Page: channels.Page{
 					Total:  uint64(num),
 					Offset: 1000,
 					Limit:  50,
@@ -547,14 +547,14 @@ func TestRetrieveAll(t *testing.T) {
 		},
 		{
 			desc: "retrieve channels with offset and limit out of range",
-			page: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			page: channels.ChannelsPage{
+				Page: channels.Page{
 					Offset: 170,
 					Limit:  50,
 				},
 			},
-			response: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			response: channels.ChannelsPage{
+				Page: channels.Page{
 					Total:  uint64(num),
 					Offset: 170,
 					Limit:  50,
@@ -565,14 +565,14 @@ func TestRetrieveAll(t *testing.T) {
 		},
 		{
 			desc: "retrieve channels with limit out of range",
-			page: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			page: channels.ChannelsPage{
+				Page: channels.Page{
 					Offset: 0,
 					Limit:  1000,
 				},
 			},
-			response: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			response: channels.ChannelsPage{
+				Page: channels.Page{
 					Total:  uint64(num),
 					Offset: 0,
 					Limit:  1000,
@@ -583,9 +583,9 @@ func TestRetrieveAll(t *testing.T) {
 		},
 		{
 			desc: "retrieve channels with empty page",
-			page: channels.Page{},
-			response: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			page: channels.ChannelsPage{},
+			response: channels.ChannelsPage{
+				Page: channels.Page{
 					Total:  uint64(num),
 					Offset: 0,
 					Limit:  0,
@@ -596,15 +596,15 @@ func TestRetrieveAll(t *testing.T) {
 		},
 		{
 			desc: "retrieve channels with name",
-			page: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			page: channels.ChannelsPage{
+				Page: channels.Page{
 					Offset: 0,
 					Limit:  10,
 					Name:   items[0].Name,
 				},
 			},
-			response: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			response: channels.ChannelsPage{
+				Page: channels.Page{
 					Total:  1,
 					Offset: 0,
 					Limit:  10,
@@ -615,15 +615,15 @@ func TestRetrieveAll(t *testing.T) {
 		},
 		{
 			desc: "retrieve channels with domain",
-			page: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			page: channels.ChannelsPage{
+				Page: channels.Page{
 					Offset: 0,
 					Limit:  10,
 					Domain: items[0].Domain,
 				},
 			},
-			response: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			response: channels.ChannelsPage{
+				Page: channels.Page{
 					Total:  1,
 					Offset: 0,
 					Limit:  10,
@@ -634,15 +634,15 @@ func TestRetrieveAll(t *testing.T) {
 		},
 		{
 			desc: "retrieve channels with metadata",
-			page: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			page: channels.ChannelsPage{
+				Page: channels.Page{
 					Offset:   0,
 					Limit:    10,
 					Metadata: items[0].Metadata,
 				},
 			},
-			response: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			response: channels.ChannelsPage{
+				Page: channels.Page{
 					Total:  1,
 					Offset: 0,
 					Limit:  10,
@@ -653,8 +653,8 @@ func TestRetrieveAll(t *testing.T) {
 		},
 		{
 			desc: "retrieve channels with invalid metadata",
-			page: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			page: channels.ChannelsPage{
+				Page: channels.Page{
 					Offset: 0,
 					Limit:  10,
 					Metadata: map[string]interface{}{
@@ -662,8 +662,8 @@ func TestRetrieveAll(t *testing.T) {
 					},
 				},
 			},
-			response: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			response: channels.ChannelsPage{
+				Page: channels.Page{
 					Total:  0,
 					Offset: 0,
 					Limit:  10,
@@ -676,7 +676,7 @@ func TestRetrieveAll(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(tc.desc, func(t *testing.T) {
-			switch channels, err := repo.RetrieveAll(context.Background(), tc.page.PageMetadata); {
+			switch channels, err := repo.RetrieveAll(context.Background(), tc.page.Page); {
 			case err == nil:
 				assert.Nil(t, err, fmt.Sprintf("%s: expected %s got %s\n", tc.desc, tc.err, err))
 				assert.Equal(t, tc.response.Total, channels.Total, fmt.Sprintf("%s: expected %d got %d\n", tc.desc, tc.response.Total, channels.Total))

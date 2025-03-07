@@ -472,9 +472,9 @@ func TestListChannels(t *testing.T) {
 		desc                string
 		userKind            string
 		session             smqauthn.Session
-		page                channels.PageMetadata
-		retrieveAllResponse channels.Page
-		response            channels.Page
+		page                channels.Page
+		retrieveAllResponse channels.ChannelsPage
+		response            channels.ChannelsPage
 		id                  string
 		size                uint64
 		listObjectsErr      error
@@ -487,20 +487,20 @@ func TestListChannels(t *testing.T) {
 			userKind: "non-admin",
 			session:  smqauthn.Session{UserID: nonAdminID, DomainID: domainID, SuperAdmin: false},
 			id:       nonAdminID,
-			page: channels.PageMetadata{
+			page: channels.Page{
 				Offset: 0,
 				Limit:  100,
 			},
-			retrieveAllResponse: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			retrieveAllResponse: channels.ChannelsPage{
+				Page: channels.Page{
 					Total:  2,
 					Offset: 0,
 					Limit:  100,
 				},
 				Channels: []channels.Channel{validChannel, validChannel},
 			},
-			response: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			response: channels.ChannelsPage{
+				Page: channels.Page{
 					Total:  2,
 					Offset: 0,
 					Limit:  100,
@@ -514,12 +514,12 @@ func TestListChannels(t *testing.T) {
 			userKind: "non-admin",
 			session:  smqauthn.Session{UserID: nonAdminID, DomainID: domainID, SuperAdmin: false},
 			id:       nonAdminID,
-			page: channels.PageMetadata{
+			page: channels.Page{
 				Offset: 0,
 				Limit:  100,
 			},
-			retrieveAllResponse: channels.Page{},
-			response:            channels.Page{},
+			retrieveAllResponse: channels.ChannelsPage{},
+			response:            channels.ChannelsPage{},
 			retrieveAllErr:      repoerr.ErrNotFound,
 			err:                 svcerr.ErrNotFound,
 		},
@@ -528,23 +528,23 @@ func TestListChannels(t *testing.T) {
 			userKind: "non-admin",
 			session:  smqauthn.Session{UserID: nonAdminID, DomainID: domainID, SuperAdmin: false},
 			id:       nonAdminID,
-			page: channels.PageMetadata{
+			page: channels.Page{
 				Offset: 0,
 				Limit:  100,
 			},
-			response: channels.Page{},
+			response: channels.ChannelsPage{},
 			err:      nil,
 		},
 		{
 			desc:     "list all channels as non admin with failed to list objects",
 			userKind: "non-admin",
 			id:       nonAdminID,
-			page: channels.PageMetadata{
+			page: channels.Page{
 				Offset: 0,
 				Limit:  100,
 			},
 			retrieveAllErr: repoerr.ErrNotFound,
-			response:       channels.Page{},
+			response:       channels.ChannelsPage{},
 			listObjectsErr: svcerr.ErrNotFound,
 			err:            svcerr.ErrNotFound,
 		},
@@ -564,9 +564,9 @@ func TestListChannels(t *testing.T) {
 		desc                string
 		userKind            string
 		session             smqauthn.Session
-		page                channels.PageMetadata
-		retrieveAllResponse channels.Page
-		response            channels.Page
+		page                channels.Page
+		retrieveAllResponse channels.ChannelsPage
+		response            channels.ChannelsPage
 		id                  string
 		size                uint64
 		listObjectsErr      error
@@ -579,21 +579,21 @@ func TestListChannels(t *testing.T) {
 			userKind: "admin",
 			id:       adminID,
 			session:  smqauthn.Session{UserID: adminID, DomainID: domainID, SuperAdmin: true},
-			page: channels.PageMetadata{
+			page: channels.Page{
 				Offset: 0,
 				Limit:  100,
 				Domain: domainID,
 			},
-			retrieveAllResponse: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			retrieveAllResponse: channels.ChannelsPage{
+				Page: channels.Page{
 					Total:  2,
 					Offset: 0,
 					Limit:  100,
 				},
 				Channels: []channels.Channel{validChannel, validChannel},
 			},
-			response: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			response: channels.ChannelsPage{
+				Page: channels.Page{
 					Total:  2,
 					Offset: 0,
 					Limit:  100,
@@ -607,12 +607,12 @@ func TestListChannels(t *testing.T) {
 			userKind: "admin",
 			id:       adminID,
 			session:  smqauthn.Session{UserID: adminID, DomainID: domainID, SuperAdmin: true},
-			page: channels.PageMetadata{
+			page: channels.Page{
 				Offset: 0,
 				Limit:  100,
 				Domain: domainID,
 			},
-			retrieveAllResponse: channels.Page{},
+			retrieveAllResponse: channels.ChannelsPage{},
 			retrieveAllErr:      repoerr.ErrNotFound,
 			err:                 svcerr.ErrNotFound,
 		},
@@ -621,12 +621,12 @@ func TestListChannels(t *testing.T) {
 			userKind: "admin",
 			id:       adminID,
 			session:  smqauthn.Session{UserID: adminID, DomainID: domainID, SuperAdmin: true},
-			page: channels.PageMetadata{
+			page: channels.Page{
 				Offset: 0,
 				Limit:  100,
 				Domain: domainID,
 			},
-			retrieveAllResponse: channels.Page{},
+			retrieveAllResponse: channels.ChannelsPage{},
 			retrieveAllErr:      repoerr.ErrNotFound,
 			err:                 svcerr.ErrNotFound,
 		},

@@ -201,7 +201,7 @@ type Page struct {
 	Limit          uint64   `json:"limit"`
 	Order          string   `json:"order,omitempty"`
 	Dir            string   `json:"dir,omitempty"`
-	Id             string   `json:"id,omitempty"`
+	ID             string   `json:"id,omitempty"`
 	Name           string   `json:"name,omitempty"`
 	Metadata       Metadata `json:"metadata,omitempty"`
 	Domain         string   `json:"domain,omitempty"`

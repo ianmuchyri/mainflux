@@ -378,8 +378,8 @@ func TestListChannels(t *testing.T) {
 		level            int
 		name             string
 		metadata         sdk.Metadata
-		channelsPageMeta channels.PageMetadata
-		svcRes           channels.Page
+		channelsPageMeta channels.Page
+		svcRes           channels.ChannelsPage
 		svcErr           error
 		authenticateRes  smqauthn.Session
 		authenticateErr  error
@@ -393,15 +393,15 @@ func TestListChannels(t *testing.T) {
 			limit:    limit,
 			offset:   offset,
 			total:    total,
-			channelsPageMeta: channels.PageMetadata{
+			channelsPageMeta: channels.Page{
 				Actions: []string{},
 				Order:   "updated_at",
 				Dir:     "asc",
 				Offset:  offset,
 				Limit:   limit,
 			},
-			svcRes: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			svcRes: channels.ChannelsPage{
+				Page: channels.Page{
 					Total: uint64(len(chs[offset:limit])),
 				},
 				Channels: convertChannels(chs[offset:limit]),
@@ -420,14 +420,14 @@ func TestListChannels(t *testing.T) {
 			domainID: domainID,
 			offset:   offset,
 			limit:    limit,
-			channelsPageMeta: channels.PageMetadata{
+			channelsPageMeta: channels.Page{
 				Actions: []string{},
 				Order:   "updated_at",
 				Dir:     "asc",
 				Offset:  offset,
 				Limit:   limit,
 			},
-			svcRes:          channels.Page{},
+			svcRes:          channels.ChannelsPage{},
 			authenticateErr: svcerr.ErrAuthentication,
 			response:        sdk.ChannelsPage{},
 			err:             errors.NewSDKErrorWithStatus(svcerr.ErrAuthentication, http.StatusUnauthorized),
@@ -438,12 +438,12 @@ func TestListChannels(t *testing.T) {
 			domainID: validID,
 			offset:   offset,
 			limit:    limit,
-			channelsPageMeta: channels.PageMetadata{
+			channelsPageMeta: channels.Page{
 				Actions: []string{},
 				Order:   "updated_at",
 				Dir:     "asc",
 			},
-			svcRes:   channels.Page{},
+			svcRes:   channels.ChannelsPage{},
 			svcErr:   nil,
 			response: sdk.ChannelsPage{},
 			err:      errors.NewSDKErrorWithStatus(apiutil.ErrBearerToken, http.StatusUnauthorized),
@@ -454,15 +454,15 @@ func TestListChannels(t *testing.T) {
 			domainID: domainID,
 			offset:   offset,
 			limit:    0,
-			channelsPageMeta: channels.PageMetadata{
+			channelsPageMeta: channels.Page{
 				Actions: []string{},
 				Order:   "updated_at",
 				Dir:     "asc",
 				Offset:  offset,
 				Limit:   10,
 			},
-			svcRes: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			svcRes: channels.ChannelsPage{
+				Page: channels.Page{
 					Total: uint64(len(chs[offset:])),
 				},
 				Channels: convertChannels(chs[offset:limit]),
@@ -482,12 +482,12 @@ func TestListChannels(t *testing.T) {
 			domainID: domainID,
 			offset:   offset,
 			limit:    110,
-			channelsPageMeta: channels.PageMetadata{
+			channelsPageMeta: channels.Page{
 				Actions: []string{},
 				Order:   "updated_at",
 				Dir:     "asc",
 			},
-			svcRes:   channels.Page{},
+			svcRes:   channels.ChannelsPage{},
 			svcErr:   nil,
 			response: sdk.ChannelsPage{},
 			err:      errors.NewSDKErrorWithStatus(errors.Wrap(apiutil.ErrValidation, apiutil.ErrLimitSize), http.StatusBadRequest),
@@ -499,15 +499,15 @@ func TestListChannels(t *testing.T) {
 			offset:   0,
 			limit:    1,
 			level:    1,
-			channelsPageMeta: channels.PageMetadata{
+			channelsPageMeta: channels.Page{
 				Actions: []string{},
 				Order:   "updated_at",
 				Dir:     "asc",
 				Offset:  offset,
 				Limit:   1,
 			},
-			svcRes: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			svcRes: channels.ChannelsPage{
+				Page: channels.Page{
 					Total: 1,
 				},
 				Channels: convertChannels(chs[0:1]),
@@ -528,7 +528,7 @@ func TestListChannels(t *testing.T) {
 			offset:   0,
 			limit:    10,
 			metadata: sdk.Metadata{"name": "client_89"},
-			channelsPageMeta: channels.PageMetadata{
+			channelsPageMeta: channels.Page{
 				Actions:  []string{},
 				Order:    "updated_at",
 				Dir:      "asc",
@@ -536,8 +536,8 @@ func TestListChannels(t *testing.T) {
 				Limit:    10,
 				Metadata: clients.Metadata{"name": "client_89"},
 			},
-			svcRes: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			svcRes: channels.ChannelsPage{
+				Page: channels.Page{
 					Total: 1,
 				},
 				Channels: convertChannels([]sdk.Channel{chs[89]}),
@@ -560,12 +560,12 @@ func TestListChannels(t *testing.T) {
 			metadata: sdk.Metadata{
 				"test": make(chan int),
 			},
-			channelsPageMeta: channels.PageMetadata{
+			channelsPageMeta: channels.Page{
 				Actions: []string{},
 				Order:   "updated_at",
 				Dir:     "asc",
 			},
-			svcRes:   channels.Page{},
+			svcRes:   channels.ChannelsPage{},
 			svcErr:   nil,
 			response: sdk.ChannelsPage{},
 			err:      errors.NewSDKError(errors.New("json: unsupported type: chan int")),
@@ -576,15 +576,15 @@ func TestListChannels(t *testing.T) {
 			domainID: domainID,
 			offset:   0,
 			limit:    10,
-			channelsPageMeta: channels.PageMetadata{
+			channelsPageMeta: channels.Page{
 				Actions: []string{},
 				Order:   "updated_at",
 				Dir:     "asc",
 				Offset:  0,
 				Limit:   10,
 			},
-			svcRes: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			svcRes: channels.ChannelsPage{
+				Page: channels.Page{
 					Total: 1,
 				},
 				Channels: []channels.Channel{{

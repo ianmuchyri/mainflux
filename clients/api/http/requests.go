@@ -71,30 +71,16 @@ func (req viewClientPermsReq) validate() error {
 }
 
 type listClientsReq struct {
-	name       string
-	tag        string
-	status     clients.Status
-	metadata   clients.Metadata
-	roleName   string
-	roleID     string
-	actions    []string
-	accessType string
-	order      string
-	dir        string
-	offset     uint64
-	limit      uint64
-	groupID    string
-	channelID  string
-	connType   string
-	userID     string
+	clients.Page
+	userID string
 }
 
 func (req listClientsReq) validate() error {
-	if req.limit > api.MaxLimitSize || req.limit < 1 {
+	if req.Limit > api.MaxLimitSize || req.Limit < 1 {
 		return apiutil.ErrLimitSize
 	}
 
-	if len(req.name) > api.MaxNameSize {
+	if len(req.Name) > api.MaxNameSize {
 		return apiutil.ErrNameSize
 	}
 

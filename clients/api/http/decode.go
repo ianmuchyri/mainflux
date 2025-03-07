@@ -116,23 +116,31 @@ func decodeListClients(_ context.Context, r *http.Request) (interface{}, error) 
 		return listClientsReq{}, errors.Wrap(apiutil.ErrValidation, err)
 	}
 
+	id, err := apiutil.ReadStringQuery(r, api.IDOrder, "")
+	if err != nil {
+		return listClientsReq{}, errors.Wrap(apiutil.ErrValidation, err)
+	}
+
 	req := listClientsReq{
-		name:       name,
-		tag:        tag,
-		status:     status,
-		metadata:   meta,
-		roleName:   roleName,
-		roleID:     roleID,
-		actions:    actions,
-		accessType: accessType,
-		order:      order,
-		dir:        dir,
-		offset:     offset,
-		limit:      limit,
-		groupID:    groupID,
-		channelID:  channelID,
-		connType:   connType,
-		userID:     userID,
+		Page: clients.Page{
+			Name:           name,
+			Tag:            tag,
+			Status:         status,
+			Metadata:       meta,
+			RoleName:       roleName,
+			RoleID:         roleID,
+			Actions:        actions,
+			AccessType:     accessType,
+			Order:          order,
+			Dir:            dir,
+			Offset:         offset,
+			Limit:          limit,
+			Group:          groupID,
+			Channel:        channelID,
+			ConnectionType: connType,
+			ID:             id,
+		},
+		userID: userID,
 	}
 	return req, nil
 }

@@ -439,7 +439,7 @@ func TestListChannels(t *testing.T) {
 		domainID             string
 		token                string
 		session              smqauthn.Session
-		listChannelsResponse channels.Page
+		listChannelsResponse channels.ChannelsPage
 		status               int
 		authnErr             error
 		err                  error
@@ -449,8 +449,8 @@ func TestListChannels(t *testing.T) {
 			domainID: validID,
 			token:    validToken,
 			status:   http.StatusOK,
-			listChannelsResponse: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			listChannelsResponse: channels.ChannelsPage{
+				Page: channels.Page{
 					Total: 1,
 				},
 				Channels: []channels.Channel{validChannelResp},
@@ -476,8 +476,8 @@ func TestListChannels(t *testing.T) {
 			desc:     "list channels with offset",
 			domainID: validID,
 			token:    validToken,
-			listChannelsResponse: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			listChannelsResponse: channels.ChannelsPage{
+				Page: channels.Page{
 					Total: 1,
 				},
 				Channels: []channels.Channel{validChannelResp},
@@ -498,8 +498,8 @@ func TestListChannels(t *testing.T) {
 			desc:     "list channels with limit",
 			domainID: validID,
 			token:    validToken,
-			listChannelsResponse: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			listChannelsResponse: channels.ChannelsPage{
+				Page: channels.Page{
 					Total: 1,
 				},
 				Channels: []channels.Channel{validChannelResp},
@@ -528,8 +528,8 @@ func TestListChannels(t *testing.T) {
 			desc:     "list channels with name",
 			domainID: validID,
 			token:    validToken,
-			listChannelsResponse: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			listChannelsResponse: channels.ChannelsPage{
+				Page: channels.Page{
 					Total: 1,
 				},
 				Channels: []channels.Channel{validChannelResp},
@@ -558,8 +558,8 @@ func TestListChannels(t *testing.T) {
 			desc:     "list channels with status",
 			domainID: validID,
 			token:    validToken,
-			listChannelsResponse: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			listChannelsResponse: channels.ChannelsPage{
+				Page: channels.Page{
 					Total: 1,
 				},
 				Channels: []channels.Channel{validChannelResp},
@@ -588,8 +588,8 @@ func TestListChannels(t *testing.T) {
 			desc:     "list channels with tags",
 			domainID: validID,
 			token:    validToken,
-			listChannelsResponse: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			listChannelsResponse: channels.ChannelsPage{
+				Page: channels.Page{
 					Total: 1,
 				},
 				Channels: []channels.Channel{validChannelResp},
@@ -618,8 +618,8 @@ func TestListChannels(t *testing.T) {
 			desc:     "list channels with metadata",
 			domainID: validID,
 			token:    validToken,
-			listChannelsResponse: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			listChannelsResponse: channels.ChannelsPage{
+				Page: channels.Page{
 					Total: 1,
 				},
 				Channels: []channels.Channel{validChannelResp},
@@ -648,8 +648,8 @@ func TestListChannels(t *testing.T) {
 			desc:     "list channels with permissions",
 			domainID: validID,
 			token:    validToken,
-			listChannelsResponse: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			listChannelsResponse: channels.ChannelsPage{
+				Page: channels.Page{
 					Total: 1,
 				},
 				Channels: []channels.Channel{validChannelResp},
@@ -678,8 +678,8 @@ func TestListChannels(t *testing.T) {
 			desc:     "list channels with list perms",
 			domainID: validID,
 			token:    validToken,
-			listChannelsResponse: channels.Page{
-				PageMetadata: channels.PageMetadata{
+			listChannelsResponse: channels.ChannelsPage{
+				Page: channels.Page{
 					Total: 1,
 				},
 				Channels: []channels.Channel{validChannelResp},

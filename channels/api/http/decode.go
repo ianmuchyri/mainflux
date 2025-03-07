@@ -11,6 +11,7 @@ import (
 
 	api "github.com/absmach/supermq/api/http"
 	apiutil "github.com/absmach/supermq/api/http/util"
+	"github.com/absmach/supermq/channels"
 	"github.com/absmach/supermq/clients"
 	"github.com/absmach/supermq/pkg/errors"
 	"github.com/go-chi/chi/v5"
@@ -135,22 +136,30 @@ func decodeListChannels(_ context.Context, r *http.Request) (interface{}, error)
 		return listChannelsReq{}, errors.Wrap(apiutil.ErrValidation, err)
 	}
 
+	id, err := apiutil.ReadStringQuery(r, api.IDOrder, "")
+	if err != nil {
+		return listChannelsReq{}, errors.Wrap(apiutil.ErrValidation, err)
+	}
+
 	req := listChannelsReq{
-		name:       name,
-		tag:        tag,
-		status:     status,
-		metadata:   meta,
-		roleName:   roleName,
-		roleID:     roleID,
-		actions:    actions,
-		accessType: accessType,
-		order:      order,
-		dir:        dir,
-		offset:     offset,
-		limit:      limit,
-		groupID:    groupID,
-		clientID:   clientID,
-		userID:     userID,
+		Page: channels.Page{
+			Name:       name,
+			Tag:        tag,
+			Status:     status,
+			Metadata:   meta,
+			RoleName:   roleName,
+			RoleID:     roleID,
+			Actions:    actions,
+			AccessType: accessType,
+			Order:      order,
+			Dir:        dir,
+			Offset:     offset,
+			Limit:      limit,
+			Group:      groupID,
+			Client:     clientID,
+			ID:         id,
+		},
+		userID: userID,
 	}
 	return req, nil
 }

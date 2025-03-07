@@ -181,27 +181,27 @@ func (svc service) ViewChannel(ctx context.Context, session authn.Session, id st
 	return channel, nil
 }
 
-func (svc service) ListChannels(ctx context.Context, session authn.Session, pm PageMetadata) (Page, error) {
+func (svc service) ListChannels(ctx context.Context, session authn.Session, pm Page) (ChannelsPage, error) {
 	switch session.SuperAdmin {
 	case true:
 		cp, err := svc.repo.RetrieveAll(ctx, pm)
 		if err != nil {
-			return Page{}, errors.Wrap(svcerr.ErrViewEntity, err)
+			return ChannelsPage{}, errors.Wrap(svcerr.ErrViewEntity, err)
 		}
 		return cp, nil
 	default:
 		cp, err := svc.repo.RetrieveUserChannels(ctx, session.DomainID, session.UserID, pm)
 		if err != nil {
-			return Page{}, errors.Wrap(svcerr.ErrViewEntity, err)
+			return ChannelsPage{}, errors.Wrap(svcerr.ErrViewEntity, err)
 		}
 		return cp, nil
 	}
 }
 
-func (svc service) ListUserChannels(ctx context.Context, session authn.Session, userID string, pm PageMetadata) (Page, error) {
+func (svc service) ListUserChannels(ctx context.Context, session authn.Session, userID string, pm Page) (ChannelsPage, error) {
 	cp, err := svc.repo.RetrieveUserChannels(ctx, session.DomainID, userID, pm)
 	if err != nil {
-		return Page{}, errors.Wrap(svcerr.ErrViewEntity, err)
+		return ChannelsPage{}, errors.Wrap(svcerr.ErrViewEntity, err)
 	}
 	return cp, nil
 }

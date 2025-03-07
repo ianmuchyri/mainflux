@@ -40,13 +40,13 @@ type Channel struct {
 	ConnectionTypes           []connections.ConnType `json:"connection_types,omitempty"`
 }
 
-type PageMetadata struct {
+type Page struct {
 	Total          uint64           `json:"total"`
 	Offset         uint64           `json:"offset"`
 	Limit          uint64           `json:"limit"`
 	Order          string           `json:"order,omitempty"`
 	Dir            string           `json:"dir,omitempty"`
-	Id             string           `json:"id,omitempty"`
+	ID             string           `json:"id,omitempty"`
 	Name           string           `json:"name,omitempty"`
 	Metadata       clients.Metadata `json:"metadata,omitempty"`
 	Domain         string           `json:"domain,omitempty"`
@@ -64,8 +64,8 @@ type PageMetadata struct {
 
 // ChannelsPage contains page related metadata as well as list of channels that
 // belong to this page.
-type Page struct {
-	PageMetadata
+type ChannelsPage struct {
+	Page
 	Channels []Channel
 }
 
@@ -105,10 +105,10 @@ type Service interface {
 	DisableChannel(ctx context.Context, session authn.Session, id string) (Channel, error)
 
 	// ListChannels retrieves data about subset of channels that belongs to the user.
-	ListChannels(ctx context.Context, session authn.Session, pm PageMetadata) (Page, error)
+	ListChannels(ctx context.Context, session authn.Session, pm Page) (ChannelsPage, error)
 
 	// ListUserChannels retrieves data about subset of channels that belong to the specified user.
-	ListUserChannels(ctx context.Context, session authn.Session, userID string, pm PageMetadata) (Page, error)
+	ListUserChannels(ctx context.Context, session authn.Session, userID string, pm Page) (ChannelsPage, error)
 
 	// RemoveChannel removes the client identified by the provided ID, that
 	// belongs to the user.
@@ -144,13 +144,13 @@ type Repository interface {
 	ChangeStatus(ctx context.Context, channel Channel) (Channel, error)
 
 	// RetrieveUserChannels retrieves the channel of given domainID and userID.
-	RetrieveUserChannels(ctx context.Context, domainID, userID string, pm PageMetadata) (Page, error)
+	RetrieveUserChannels(ctx context.Context, domainID, userID string, pm Page) (ChannelsPage, error)
 
 	// RetrieveByID retrieves the channel having the provided identifier
 	RetrieveByID(ctx context.Context, id string) (Channel, error)
 
 	// RetrieveAll retrieves the subset of channels.
-	RetrieveAll(ctx context.Context, pm PageMetadata) (Page, error)
+	RetrieveAll(ctx context.Context, pm Page) (ChannelsPage, error)
 
 	// Remove removes the channel having the provided identifier
 	Remove(ctx context.Context, ids ...string) error
