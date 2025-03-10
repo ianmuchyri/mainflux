@@ -13,7 +13,7 @@ import (
 	"github.com/0x6flab/namegenerator"
 	"github.com/absmach/supermq/channels"
 	"github.com/absmach/supermq/channels/postgres"
-	"github.com/absmach/supermq/clients"
+
 	"github.com/absmach/supermq/internal/testsutil"
 	"github.com/absmach/supermq/pkg/connections"
 	"github.com/absmach/supermq/pkg/errors"
@@ -33,7 +33,7 @@ var (
 		Tags:            []string{"tag1", "tag2"},
 		Metadata:        map[string]interface{}{"key": "value"},
 		CreatedAt:       time.Now().UTC().Truncate(time.Microsecond),
-		Status:          clients.EnabledStatus,
+		Status:          channels.EnabledStatus,
 		ConnectionTypes: []connections.ConnType{},
 	}
 	validConnection = channels.Connection{
@@ -79,7 +79,7 @@ func TestSave(t *testing.T) {
 				Name:      namegen.Generate(),
 				Metadata:  map[string]interface{}{"key": "value"},
 				CreatedAt: time.Now().UTC().Truncate(time.Microsecond),
-				Status:    clients.EnabledStatus,
+				Status:    channels.EnabledStatus,
 			},
 			resp: []channels.Channel{},
 			err:  repoerr.ErrMalformedEntity,
@@ -92,7 +92,7 @@ func TestSave(t *testing.T) {
 				Name:      namegen.Generate(),
 				Metadata:  map[string]interface{}{"key": "value"},
 				CreatedAt: time.Now().UTC().Truncate(time.Microsecond),
-				Status:    clients.EnabledStatus,
+				Status:    channels.EnabledStatus,
 			},
 			resp: []channels.Channel{},
 			err:  repoerr.ErrMalformedEntity,
@@ -105,7 +105,7 @@ func TestSave(t *testing.T) {
 				Name:      strings.Repeat("a", 1025),
 				Metadata:  map[string]interface{}{"key": "value"},
 				CreatedAt: time.Now().UTC().Truncate(time.Microsecond),
-				Status:    clients.EnabledStatus,
+				Status:    channels.EnabledStatus,
 			},
 			resp: []channels.Channel{},
 			err:  repoerr.ErrMalformedEntity,
@@ -120,7 +120,7 @@ func TestSave(t *testing.T) {
 					"key": make(chan int),
 				},
 				CreatedAt: time.Now().UTC().Truncate(time.Microsecond),
-				Status:    clients.EnabledStatus,
+				Status:    channels.EnabledStatus,
 			},
 			resp: []channels.Channel{},
 			err:  repoerr.ErrMalformedEntity,
@@ -306,7 +306,7 @@ func TestChangeStatus(t *testing.T) {
 	disabledChannel := validChannel
 	disabledChannel.ID = testsutil.GenerateUUID(t)
 	disabledChannel.Name = namegen.Generate()
-	disabledChannel.Status = clients.DisabledStatus
+	disabledChannel.Status = channels.DisabledStatus
 
 	_, err := repo.Save(context.Background(), validChannel, disabledChannel)
 	require.Nil(t, err, fmt.Sprintf("save channel unexpected error: %s", err))
@@ -320,7 +320,7 @@ func TestChangeStatus(t *testing.T) {
 			desc: "disable channel successfully",
 			channel: channels.Channel{
 				ID:        validChannel.ID,
-				Status:    clients.DisabledStatus,
+				Status:    channels.DisabledStatus,
 				UpdatedAt: validTimestamp,
 				UpdatedBy: testsutil.GenerateUUID(t),
 			},
@@ -330,7 +330,7 @@ func TestChangeStatus(t *testing.T) {
 			desc: "enable channel successfully",
 			channel: channels.Channel{
 				ID:        disabledChannel.ID,
-				Status:    clients.EnabledStatus,
+				Status:    channels.EnabledStatus,
 				UpdatedAt: validTimestamp,
 				UpdatedBy: testsutil.GenerateUUID(t),
 			},
@@ -340,7 +340,7 @@ func TestChangeStatus(t *testing.T) {
 			desc: "change status channel with invalid ID",
 			channel: channels.Channel{
 				ID:        testsutil.GenerateUUID(t),
-				Status:    clients.DisabledStatus,
+				Status:    channels.DisabledStatus,
 				UpdatedAt: validTimestamp,
 				UpdatedBy: testsutil.GenerateUUID(t),
 			},
@@ -349,7 +349,7 @@ func TestChangeStatus(t *testing.T) {
 		{
 			desc: "change status channel with empty ID",
 			channel: channels.Channel{
-				Status:    clients.DisabledStatus,
+				Status:    channels.DisabledStatus,
 				UpdatedAt: validTimestamp,
 				UpdatedBy: testsutil.GenerateUUID(t),
 			},
@@ -438,7 +438,7 @@ func TestRetrieveAll(t *testing.T) {
 			Name:            name,
 			Metadata:        map[string]interface{}{"name": name},
 			CreatedAt:       time.Now().UTC().Truncate(time.Microsecond),
-			Status:          clients.EnabledStatus,
+			Status:          channels.EnabledStatus,
 			ConnectionTypes: []connections.ConnType{},
 		}
 		_, err := repo.Save(context.Background(), channel)
@@ -1338,7 +1338,7 @@ func TestRetrieveParentGroupChannels(t *testing.T) {
 			Name:            name,
 			Metadata:        map[string]interface{}{"name": name},
 			CreatedAt:       time.Now().UTC().Truncate(time.Microsecond),
-			Status:          clients.EnabledStatus,
+			Status:          channels.EnabledStatus,
 			ConnectionTypes: []connections.ConnType{},
 		}
 		items = append(items, channel)
@@ -1406,7 +1406,7 @@ func TestUnsetParentGroupFromChannels(t *testing.T) {
 			Name:        name,
 			Metadata:    map[string]interface{}{"name": name},
 			CreatedAt:   time.Now().UTC().Truncate(time.Microsecond),
-			Status:      clients.EnabledStatus,
+			Status:      channels.EnabledStatus,
 		}
 		items = append(items, channel)
 	}

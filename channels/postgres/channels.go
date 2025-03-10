@@ -14,7 +14,6 @@ import (
 	api "github.com/absmach/supermq/api/http"
 	apiutil "github.com/absmach/supermq/api/http/util"
 	"github.com/absmach/supermq/channels"
-	clients "github.com/absmach/supermq/clients"
 	"github.com/absmach/supermq/pkg/connections"
 	"github.com/absmach/supermq/pkg/errors"
 	repoerr "github.com/absmach/supermq/pkg/errors/repository"
@@ -102,7 +101,7 @@ func (cr *channelRepository) Update(ctx context.Context, channel channels.Channe
         WHERE id = :id AND status = :status
         RETURNING id, name, tags, metadata, COALESCE(domain_id, '') AS domain_id, COALESCE(parent_group_id, '') AS parent_group_id, status, created_at, updated_at, updated_by`,
 		upq)
-	channel.Status = clients.EnabledStatus
+	channel.Status = channels.EnabledStatus
 	return cr.update(ctx, channel, q)
 }
 
@@ -110,7 +109,7 @@ func (cr *channelRepository) UpdateTags(ctx context.Context, channel channels.Ch
 	q := `UPDATE channels SET tags = :tags, updated_at = :updated_at, updated_by = :updated_by
 	WHERE id = :id AND status = :status
 	RETURNING id, name, tags,  metadata, COALESCE(domain_id, '') AS domain_id, COALESCE(parent_group_id, '') AS parent_group_id, status, created_at, updated_at, updated_by`
-	channel.Status = clients.EnabledStatus
+	channel.Status = channels.EnabledStatus
 	return cr.update(ctx, channel, q)
 }
 
@@ -142,6 +141,9 @@ func (cr *channelRepository) RetrieveByID(ctx context.Context, id string) (chann
 		}
 		return toChannel(dbch)
 	}
+
+	newch, _ := toChannel(dbch)
+	fmt.Println("channel in repo: ", newch)
 
 	return channels.Channel{}, repoerr.ErrNotFound
 }
@@ -249,10 +251,10 @@ func (cr *channelRepository) RetrieveAll(ctx context.Context, pm channels.Page) 
 }
 
 func (repo *channelRepository) RetrieveUserChannels(ctx context.Context, domainID, userID string, pm channels.Page) (channels.ChannelsPage, error) {
-	return repo.retrieveClients(ctx, domainID, userID, pm)
+	return repo.retrieveChannels(ctx, domainID, userID, pm)
 }
 
-func (repo *channelRepository) retrieveClients(ctx context.Context, domainID, userID string, pm channels.Page) (channels.ChannelsPage, error) {
+func (repo *channelRepository) retrieveChannels(ctx context.Context, domainID, userID string, pm channels.Page) (channels.ChannelsPage, error) {
 	pageQuery, err := PageQuery(pm)
 	if err != nil {
 		return channels.ChannelsPage{}, err
@@ -880,7 +882,7 @@ type dbChannel struct {
 	CreatedAt                 time.Time        `db:"created_at,omitempty"`
 	UpdatedAt                 sql.NullTime     `db:"updated_at,omitempty"`
 	UpdatedBy                 *string          `db:"updated_by,omitempty"`
-	Status                    clients.Status   `db:"status,omitempty"`
+	Status                    channels.Status  `db:"status,omitempty"`
 	ParentGroupPath           string           `db:"parent_group_path,omitempty"`
 	RoleID                    string           `db:"role_id,omitempty"`
 	RoleName                  string           `db:"role_name,omitempty"`
@@ -952,7 +954,7 @@ func toString(s sql.NullString) string {
 }
 
 func toChannel(ch dbChannel) (channels.Channel, error) {
-	var metadata clients.Metadata
+	var metadata channels.Metadata
 	if ch.Metadata != nil {
 		if err := json.Unmarshal([]byte(ch.Metadata), &metadata); err != nil {
 			return channels.Channel{}, errors.Wrap(errors.ErrMalformedEntity, err)
@@ -1036,7 +1038,7 @@ func PageQuery(pm channels.Page) (string, error) {
 	if len(pm.IDs) != 0 {
 		query = append(query, fmt.Sprintf("id IN ('%s')", strings.Join(pm.IDs, "','")))
 	}
-	if pm.Status != clients.AllStatus {
+	if pm.Status != channels.AllStatus {
 		query = append(query, "c.status = :status")
 	}
 	if pm.Domain != "" {
@@ -1115,21 +1117,21 @@ func toDBChannelsPage(pm channels.Page) (dbChannelsPage, error) {
 }
 
 type dbChannelsPage struct {
-	Limit      uint64         `db:"limit"`
-	Offset     uint64         `db:"offset"`
-	Name       string         `db:"name"`
-	Id         string         `db:"id"`
-	Domain     string         `db:"domain_id"`
-	Metadata   []byte         `db:"metadata"`
-	Tag        string         `db:"tag"`
-	Status     clients.Status `db:"status"`
-	GroupID    string         `db:"group_id"`
-	ClientID   string         `db:"client_id"`
-	ConnType   string         `db:"type"`
-	RoleName   string         `db:"role_name"`
-	RoleID     string         `db:"role_id"`
-	Actions    pq.StringArray `db:"actions"`
-	AccessType string         `db:"access_type"`
+	Limit      uint64          `db:"limit"`
+	Offset     uint64          `db:"offset"`
+	Name       string          `db:"name"`
+	Id         string          `db:"id"`
+	Domain     string          `db:"domain_id"`
+	Metadata   []byte          `db:"metadata"`
+	Tag        string          `db:"tag"`
+	Status     channels.Status `db:"status"`
+	GroupID    string          `db:"group_id"`
+	ClientID   string          `db:"client_id"`
+	ConnType   string          `db:"type"`
+	RoleName   string          `db:"role_name"`
+	RoleID     string          `db:"role_id"`
+	Actions    pq.StringArray  `db:"actions"`
+	AccessType string          `db:"access_type"`
 }
 
 type dbConnection struct {
