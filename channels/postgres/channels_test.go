@@ -13,7 +13,6 @@ import (
 	"github.com/0x6flab/namegenerator"
 	"github.com/absmach/supermq/channels"
 	"github.com/absmach/supermq/channels/postgres"
-
 	"github.com/absmach/supermq/internal/testsutil"
 	"github.com/absmach/supermq/pkg/connections"
 	"github.com/absmach/supermq/pkg/errors"
