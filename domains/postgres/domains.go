@@ -582,7 +582,7 @@ func buildPageQuery(pm domains.Page) (string, error) {
 	var emq string
 
 	if pm.ID != "" {
-		query = append(query, "d.id ILIKE '%' || :id || '%'")
+		query = append(query, "d.id = :id")
 	}
 
 	if len(pm.IDs) != 0 {

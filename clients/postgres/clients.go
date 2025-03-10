@@ -978,7 +978,7 @@ func PageQuery(pm clients.Page) (string, error) {
 		query = append(query, "c.identity ILIKE '%' || :identity || '%'")
 	}
 	if pm.ID != "" {
-		query = append(query, "c.id ILIKE '%' || :id || '%'")
+		query = append(query, "c.id = :id")
 	}
 	if pm.Tag != "" {
 		query = append(query, "EXISTS (SELECT 1 FROM unnest(tags) AS tag WHERE tag ILIKE '%' || :tag || '%')")

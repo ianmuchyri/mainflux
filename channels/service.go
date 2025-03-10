@@ -178,7 +178,6 @@ func (svc service) ViewChannel(ctx context.Context, session authn.Session, id st
 		return Channel{}, errors.Wrap(svcerr.ErrViewEntity, err)
 	}
 
-	fmt.Println("channel in service: ", channel)
 	return channel, nil
 }
 

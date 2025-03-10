@@ -142,9 +142,6 @@ func (cr *channelRepository) RetrieveByID(ctx context.Context, id string) (chann
 		return toChannel(dbch)
 	}
 
-	newch, _ := toChannel(dbch)
-	fmt.Println("channel in repo: ", newch)
-
 	return channels.Channel{}, repoerr.ErrNotFound
 }
 
@@ -1025,7 +1022,7 @@ func PageQuery(pm channels.Page) (string, error) {
 	}
 
 	if pm.ID != "" {
-		query = append(query, "c.id ILIKE '%' || :id || '%'")
+		query = append(query, "c.id = :id")
 	}
 	if pm.Tag != "" {
 		query = append(query, "EXISTS (SELECT 1 FROM unnest(tags) AS tag WHERE tag ILIKE '%' || :tag || '%')")
